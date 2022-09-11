@@ -1,0 +1,24 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #C2C2C2;
+}
+canvas {
+    display: block;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 650px;
+    bottom: 0;
+    right: 0;
+    box-shadow: inset 0px 0px 0px 10px #C2C2C2, inset 0px 0px 0px 11px black;
+    background: #CDCDCD;
+}
+
+.canvasZero {
+    z-index: 0;
+}
+
+.canvasOne {
+    z-index: 1;
+}

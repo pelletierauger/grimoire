@@ -1,0 +1,232 @@
+body {
+    /*    padding: 0px;
+    background-color: #DADADA;
+    background-color: white;*/
+    color: black;
+    font: 17px "Inconsolata", Helvetica, Arial, sans-serif;
+    line-height: 24px;
+}
+
+#editors {
+    margin-top: 10px;
+}
+
+#javascript-editor {
+    /*    display: block;
+    z-index: 2;
+    position: absolute;
+    top: 200px;
+    bottom: 0px;
+    right: 0px;*/
+}
+
+#supercollider-editor {
+    /*    display: block;
+    z-index: 2;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;*/
+}
+
+
+.editors {
+    padding: 10px;
+}
+
+.CodeMirror {
+    /*border: 1px solid red;*/
+    z-index: 2;
+    width: 1200px;
+    height: 315px;
+    margin-left: 6px;
+    /*    display: block;
+    z-index: 2;
+    position: absolute;
+    top: 200px;
+    bottom: 0px;
+    right: 0px;*/
+}
+
+#curtain {
+    display: none;
+    background: #CDCDCD;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    min-height: 100%;
+}
+
+
+.console {
+    /*#javascript-console, #supercollider-console {*/
+    display: block;
+    position: relative;
+    margin-left: 10px;
+    background: none;
+    overflow: scroll;
+    border: 1px solid green;
+    z-index: 4;
+    line-height: 14px;
+    width: 600px;
+    height: 57px;
+    font-family: "Inconsolata";
+    font-size: 12px;
+    resize: none;
+    border-style: none;
+    outline: none;
+}
+
+.console span {
+    background: #CDCDCD;
+    padding: 2px 0;
+}
+.console::-webkit-scrollbar {
+    display: none;
+}
+
+.console span::selection {
+    background-color: #C2C2C2;
+    /*color: #fff;*/
+}
+
+canvas {
+    z-index: -1;
+}
+
+*[role="presentation"] span {
+    background: #CECECE;
+    background: rgba(210, 210, 210, 1);
+    background: #2D2D2D;
+    /*padding: 4px 0;*/
+    margin: 0px 0;
+    padding: 4px 0;
+    /* style these a buttons w/o relying on a .button class */
+    /*line-height: 1.25em;*/
+    z-index: -2;
+}
+
+#appcontrol {
+    /*display: block;*/
+    z-index: 10;
+    display: inline-block;
+    /*margin: auto;*/
+    /*float: left;*/
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    /*position: absolute;*/
+    width: 400px;
+    /*top: 0;*/
+    /*left: 20;*/
+    /*bottom: 10;*/
+    /*right: 0;*/
+    font-family: "Inconsolata";
+    font-size: 16px;
+    padding: 4px;
+    outline: none;
+    background-color: #CDCDCD;
+    border: 1px #E5E5E5 solid;
+    /*border: 0px;*/
+    border-radius: 0px;
+    transition: none;
+    cursor: unset;
+    text-align: left;
+}
+
+#appcontrol:focus {
+    border: 1px black solid;
+}
+
+#appcontrol::selection {
+    background: #C7C7C7;
+}
+
+#appcontrol:hover {
+    box-shadow: unset;
+    transition: none;
+}
+
+#keys-active {
+    display: inline-block;
+    /*display: none;*/
+    /*visibility: hidden;*/
+    opacity: 0;
+    /*margin: auto;*/
+    /*float: left;*/
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 50px;
+    height: 50px;
+    background: red;
+    z-index: 2;
+}
+
+#file-tabs {
+    /*display: block;*/
+    z-index: 10;
+    display: inline-block;
+    /*margin: auto;*/
+    /*float: left;*/
+    position: fixed;
+    bottom: 10px;
+    left: 430px;
+    /*position: absolute;*/
+    width: 900px;
+    /*top: 0;*/
+    /*left: 20;*/
+    /*bottom: 10;*/
+    /*right: 0;*/
+    line-height: 1;
+    font-family: "Inconsolata";
+    margin: 0;
+    font-size: 16px;
+    padding: 0px;
+    outline: none;
+
+    /*border: 1px #E5E5E5 solid;*/
+    border-radius: 0px;
+    transition: none;
+    /*cursor: unset;*/
+    text-align: left;
+}
+
+#scd-files, #js-files {
+    display: block;
+    float: left;
+    width: 100%;
+    /*height: 57px;*/
+    font-family: "Inconsolata";
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+#scd-files {
+    /*background: yellow;*/
+    margin-bottom: 2px;
+}
+
+.file {
+    display: block;
+    float: left;
+
+    margin-right: 5px;
+    padding: 0px 2px;
+}
+
+.file:hover {
+    cursor: pointer;
+}
+
+#active-tab {
+    background-color: #959595;
+}
+
+#inactive-tab {
+    background-color: #CDCDCD;
+}
