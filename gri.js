@@ -68,6 +68,9 @@ let GrimoireEditor = function() {
     this.recording = false;
 };
 
+GrimoireEditor.prototype.revertCanvas = function() {
+    this.t.canvas.data = decodeAsciiString(this.t.canvasData);
+};
 
 GrimoireEditor.prototype.record = function() {
     // this.recordingFrame = 0;
@@ -244,6 +247,7 @@ GrimoireTab.prototype.saveCanvas = function() {
         // console.log(asciiString.length);
         // console.log(data.length);
         socket.emit('saveFile', {path: this.canvasPath, data: asciiString});
+        this.canvasData = asciiString;
     }
 };
 
