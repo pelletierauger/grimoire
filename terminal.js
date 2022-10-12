@@ -284,6 +284,10 @@ roundedSquare.vertText = `
     varying float size;
     varying vec3 cols;
     varying float t;
+    float roundedRectangle (vec2 uv, vec2 pos, vec2 size, float radius, float thickness) {
+        float d = length(max(abs(uv - pos),size) - size) - radius;
+        return smoothstep(0.66, 0.33, d / thickness * 5.0);
+    }
     void main(void) {
         gl_Position = vec4(coordinates.x, coordinates.y, 0.0, 1.0);
         // CRT curve
@@ -291,7 +295,7 @@ roundedSquare.vertText = `
         float disturbance = (floor(sin(gl_Position.y * 5. + time * 0.25 + tan(gl_Position.y * 1e3) * 0.125) * 2.)) * 0.125 * 0.125;
         float fluctuate = floor(mod(time * 1e5, 100.)/50.);
         float distr2 = (floor(sin(gl_Position.y * 1e-7 + time * 0.125 + tan(gl_Position.y * 2. + gl_Position.x * 1e-1) * 0.5) * 0.01)) * 10.1 * fluctuate;
-        distr2 *= 0.;
+        // distr2 *= 0.;
         // gl_Position.x += disturbance * 0.1 * (1. + distr2);
         // gl_Position.x += tan(floor(sin(gl_Position.y * 1e3))) * 0.1;
         // gl_Position.xy *= (1.0 - distance(gl_Position.xy, vec2(0,0)) * 0.1) * 1.05;
@@ -303,6 +307,8 @@ roundedSquare.vertText = `
         size = gl_PointSize;
         cols = colors;
         t = time;
+        float vig = (roundedRectangle(myposition, vec2(0.0, 0.0), vec2(1.85, 1.9) * 0.5, 0.001, 0.05));
+        gl_PointSize *= vig;
         // gl_PointSize = 25.0 + cos((coordinates.x + coordinates.y) * 4000000.) * 5.;
         // gl_PointSize = coordinates.z / (alph * (sin(myposition.x * myposition.y * 1.) * 3. + 0.5));
     }
