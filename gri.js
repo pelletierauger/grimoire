@@ -171,6 +171,89 @@ GrimoireEditor.prototype.saveCanvas = function() {
 };
 
 
+GrimoireEditor.prototype.canvasToCanvas = function(c0, x0, y0, x1, y1, c1, x, y) {
+    c0 = this.getTab(c0);
+    c1 = this.getTab(c1);
+    console.log(c0);
+    console.log(c1);
+    for (let i = y0; i < y1; i++) {
+        for (let j = x0; j < x1; j++) {
+            if (c0.canvas.data[i] == null) {
+                c1.canvas.data[y + i - y0] = [];
+            } else {
+                if (c1.canvas.data[y + i - y0] == null) {
+                    c1.canvas.data[y + i - y0] = [];
+                }
+                if (c0.canvas.data[i][j] == null) {
+                    c1.canvas.data[y + i - y0][x + j - x0] = null;
+                } else {
+                    c1.canvas.data[y + i - y0][x + j - x0] = c0.canvas.data[i][j];
+                }                
+            }
+        }
+    }
+};
+
+
+GrimoireEditor.prototype.canvasToCanvasAdd = function(c0, x0, y0, x1, y1, c1, x, y) {
+    c0 = this.getTab(c0).canvas.data;
+    c1 = this.getTab(c1).canvas.data;
+    for (let i = y0; i < y1; i++) {
+        if (c0[i]) {
+            for (let j = x0; j < x1; j++) {
+                if (c0[i][j]) {
+                    for (let k = 0; k < 63; k++) {
+                        if (c0[i][j][k] == 1) {
+                            let i2 = y + i - y0, j2 = x + j - x0;
+                            if (c1[i2] == null) {c1[i2] = []};
+                            if (c1[i2][j2] == null) {c1[i2][j2] = []};
+                            c1[i2][j2][k] = 1;
+                        }
+                    } 
+                }
+            }
+        }
+    }
+};
+
+
+GrimoireEditor.prototype.canvasToCanvasSubtract = function(c0, x0, y0, x1, y1, c1, x, y) {
+    c0 = this.getTab(c0).canvas.data;
+    c1 = this.getTab(c1).canvas.data;
+    for (let i = y0; i < y1; i++) {
+        if (c0[i]) {
+            for (let j = x0; j < x1; j++) {
+                if (c0[i][j]) {
+                    for (let k = 0; k < 63; k++) {
+                        if (c0[i][j][k] == 1) {
+                            let i2 = y + i - y0, j2 = x + j - x0;
+                            if (c1[i2] == null) {c1[i2] = []};
+                            if (c1[i2][j2] == null) {c1[i2][j2] = []};
+                            c1[i2][j2][k] = 0;
+                        }
+                    } 
+                }
+            }
+        }
+    }
+};
+
+GrimoireEditor.prototype.clearCanvas = function() {
+    this.t.canvas = new GrimoireCanvas();
+};
+
+GrimoireEditor.prototype.eraseCanvas = function(c, x0, y0, x1, y1) {
+    c = ge.getTab(c).canvas.data;
+    for (let i = y0; i < y1; i++) {
+        for (let j = x0; j < x1; j++) {
+            if (c[i]) {
+                if (c[i][j]) {
+                    c[i][j] = [];
+                }
+            }
+        }
+    }
+};
 
 newTab = function(name, lang) {
     new GrimoireTab({
