@@ -3391,8 +3391,8 @@ paint = function() {
 
 
 paintUnit = function(fx, fy, sx, sy, val = 1) {
-    let c = ge.activeTab.canvas.data;
-    let y = fy + ge.activeTab.scroll.y;
+    let c = ge.activeCanvas.data;
+    let y = fy + ge.activeTab.scroll.y + ge.paintingOffsetY;
     let xy = sx + (sy * 7);
     if (c[y]) {
         if (c[y][fx]) {
@@ -3406,7 +3406,43 @@ paintUnit = function(fx, fy, sx, sy, val = 1) {
         c[y][fx] = [];
         c[y][fx][xy] = val;
     }
-}
+};
+
+paintUnitAdd = function(fx, fy, sx, sy, val = 1) {
+    let c = ge.activeCanvas.data;
+    let y = fy + ge.activeTab.scroll.y + ge.paintingOffsetY;
+    let xy = sx + (sy * 7);
+    if (c[y]) {
+        if (c[y][fx]) {
+            c[y][fx][xy] = Math.max(c[y][fx][xy], val);
+        } else {
+            c[y][fx] = [];
+            c[y][fx][xy] = Math.max(c[y][fx][xy], val);
+        }
+    } else {
+        c[y] = [];
+        c[y][fx] = [];
+        c[y][fx][xy] = Math.max(c[y][fx][xy], val);
+    }
+};
+
+paintUnitSubtract = function(fx, fy, sx, sy, val = 1) {
+    let c = ge.activeCanvas.data;
+    let y = fy + ge.activeTab.scroll.y + ge.paintingOffsetY;
+    let xy = sx + (sy * 7);
+    if (c[y]) {
+        if (c[y][fx]) {
+            c[y][fx][xy] = Math.min(c[y][fx][xy], val);
+        } else {
+            c[y][fx] = [];
+            c[y][fx][xy] = Math.min(c[y][fx][xy], val);
+        }
+    } else {
+        c[y] = [];
+        c[y][fx] = [];
+        c[y][fx][xy] = Math.min(c[y][fx][xy], val);
+    }
+};
 
 
 paint = function(val = 1) {
@@ -3419,7 +3455,7 @@ paint = function(val = 1) {
                 let pdim = [pattern[0].length, pattern.length];
                 let vv = pattern[Math.floor(((ge.activeTab.scroll.y * 9 ) + y) * patternScale) % pdim[1]][Math.floor(x * patternScale) % pdim[0]];
                 if (val == 0) {vv = 1 - vv};
-                paintUnit(Math.floor(x/7),Math.floor(y/9), x%7,y%9, vv);
+                ge.paintingFunction(Math.floor(x/7),Math.floor(y/9), x%7,y%9, vv);
             }
         }
     }

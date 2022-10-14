@@ -47,6 +47,9 @@ tab = function(s) {
     //     }
     // }
     ge.t = ge.activeTab;
+    if (!ge.paintingOther) {
+        ge.activeCanvas = ge.t.canvas;
+    }
 }
 
 tb = function(s) {
@@ -59,6 +62,7 @@ tb = function(s) {
 let GrimoireEditor = function() {
     this.tabs = [];
     this.activeTab = null;
+    this.activeCanvas = null;
     this.t = null;
     this.activeBrush = null;
     this.activePattern = null;
@@ -66,6 +70,26 @@ let GrimoireEditor = function() {
     this.evaluatedLines = [0, 0, 0];
     this.playback = false;
     this.recording = false;
+    this.paintingFunction = paintUnit;
+    this.paintingOther = false;
+    this.paintingOffsetY = 0;
+};
+
+GrimoireEditor.prototype.paintOther = function(s, offsetY = 0) {
+    let c = this.getTab(s).canvas;
+    if (c) {
+        this.activeCanvas = c;
+    }
+    this.paintingOther = true;
+    this.paintingOffsetY = offsetY;
+    mode = 2;
+};
+
+GrimoireEditor.prototype.paintSame = function() {
+    this.activeCanvas = this.t.canvas;
+    this.paintingOther = false;
+    this.paintingOffsetY = 0;
+    mode = 2;
 };
 
 GrimoireEditor.prototype.revertCanvas = function() {
@@ -2725,6 +2749,7 @@ applyPointer = function() {
 // }
 
 patternScale = 1;
+paintingMode = 0;
 paintingKeys = function(e) {
     let s = e.key;
     let t = ge.activeTab;
@@ -2740,6 +2765,9 @@ paintingKeys = function(e) {
             case 0.5: patternScale = 0.25; break;
             case 0.25: patternScale = 1; break;
         }
+    } else if (s == "m") {
+        paintingMode = (paintingMode + 1) % 3;
+        ge.paintingFunction = [paintUnit, paintUnitAdd, paintUnitSubtract][paintingMode];
     } else if (s == "t") {
         brushIndex = 0;
         typeIndex = (typeIndex + 1) % types.length;
@@ -2878,4 +2906,52 @@ BrushFromString3 = function(s = "a", x = [1, 1, 1, 1, 1, 1, 1], y = [1, 1, 1, 1,
     };
     let br = new Brush(o);
     return br;
+};
+
+makeXFadeArray = function() {
+    xFadeArray = new Uint8Array(109 * 25 * 7 * 9);
+    for (let y = 0; y < 25 * 9; y++) {
+        for (let x = 0; x < 109 * 7; x++) {
+            xFadeArray[x + (y * 25 * 9)] = Math.floor(Math.random() * 256);
+        }
+    }
+};
+
+
+GrimoireEditor.prototype.xFadeCanvases = function(c0, x0, y0, x1, y1, c1, x, y, c2, x2, y2, interpolation) {
+    c0 = this.getTab(c0).canvas.data;
+    c1 = this.getTab(c1).canvas.data;
+    c2 = this.getTab(c2).canvas.data;
+    interpolation = Math.floor(interpolation * 256);
+    // console.log(c0);
+    // console.log(c1);
+    for (let i = y0; i < y1; i++) {
+        for (let j = x0; j < x1; j++) {
+            // if (c0.canvas.data[i] == null) {
+            //     c1.canvas.data[y + i - y0] = [];
+            // } else {
+            //     if (c1.canvas.data[y + i - y0] == null) {
+            //         c1.canvas.data[y + i - y0] = [];
+            //     }
+            //     if (c0.canvas.data[i][j] == null) {
+            //         c1.canvas.data[y + i - y0][x + j - x0] = null;
+            //     } else {
+            //         c1.canvas.data[y + i - y0][x + j - x0] = c0.canvas.data[i][j];
+            //     }                
+            // }
+            for (let k = 0; k < 7 * 9; k++) {
+                let x = j * 7 + (k % 7);
+                let y = i * 9 + Math.floor(k / 7);
+                let oneD = x + (y * 109 * 7);
+                let n = xFadeArray[oneD];
+                if (n < interpolation) {
+                    c2.canvas.data[y2 + i - y0][x2 + j - x0][k] = c0.canvas.data[i][j][k];
+                } else {
+                    c2.canvas.data[y2 + i - y0][x2 + j - x0][k] = c1.canvas.data[y + i - y0][x + j - x0][k];
+                }
+                // let A = c2[i][j][k];
+                // let B = c2[i][j][k];
+            }
+        }
+    }
 };
