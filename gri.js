@@ -3096,7 +3096,7 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     }
     return data;
 };
-sss = ge.blurCanvas("sssss.scd", 0, 365, 109, 365 + 25, "sketch.js", 0, 0);
+// sss = ge.blurCanvas("sssss.scd", 0, 365, 109, 365 + 25, "sketch.js", 0, 0);
 
 
 
@@ -3237,7 +3237,7 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     }
     return data;
 };
-sss = ge.blurCanvas("sssss.scd", 0, 411, 109, 411 + 25, "sketch.js", 0, 0);
+// sss = ge.blurCanvas("sssss.scd", 0, 411, 109, 411 + 25, "sketch.js", 0, 0);
 
 
 
@@ -3376,4 +3376,4 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     }
     return data;
 };
-sss = ge.blurCanvas("sssss.scd", 0, 365, 109, 365 + 25, "sketch.js", 0, 0);
+// sss = ge.blurCanvas("sssss.scd", 0, 365, 109, 365 + 25, "sketch.js", 0, 0);
