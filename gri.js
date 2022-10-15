@@ -3178,7 +3178,8 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
                     }
                 }
                 let newValue = data[oneD] * 0 + (sum / n * 1);
-                data2[oneD] = Math.min(newValue, 255);
+                // newValue = Math.max(40, newValue);
+                data2[oneD] = Math.min(newValue, 250);
                 // sums += newValue;
             }
         }
@@ -3196,13 +3197,13 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
         let newPixel = dith[i] < 129 ? 0 : 255;
         let err = Math.floor((dith[i] - newPixel));
         dith[i] = newPixel;
-        // let m = Math.floor(Math.random() * 6);
-        // m += 5 + Math.floor(i * 0.1);
-        // m = 5;
-        dith[i       + 1 ] += err * 7 / 16;
-        dith[i + 1*w - 1 ] += err * 3 / 16;
-        dith[i + 1*w     ] += err * 5 / 16;
-        dith[i + 1*w + 1 ] += err * 1 / 16;
+        let m = Math.floor(Math.random() * 10);
+        // m += 50 + Math.floor(i * 0.1);
+        m = 1;
+        dith[i       + 1*m ] += err * 7 / 16;
+        dith[i + 1*m*w - 1*m ] += err * 3 / 16;
+        dith[i + 1*m*w     ] += err * 5 / 16;
+        dith[i + 1*m*w + 1*m ] += err * 1 / 16;
         // sums += dith[i];
     }
     //  Drawing the dithered array back into the visible canvas.
@@ -3235,4 +3236,4 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     }
     return data;
 };
-sss = ge.blurCanvas("surpsss.scd", 0, 397, 109, 397 + 25, "sketch.js", 0, 0);
+sss = ge.blurCanvas("surpsss.scd", 0, 237, 109, 237 + 25, "sketch.js", 0, 0);
