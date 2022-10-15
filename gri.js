@@ -198,8 +198,8 @@ GrimoireEditor.prototype.saveCanvas = function() {
 GrimoireEditor.prototype.canvasToCanvas = function(c0, x0, y0, x1, y1, c1, x, y) {
     c0 = this.getTab(c0);
     c1 = this.getTab(c1);
-    console.log(c0);
-    console.log(c1);
+    // console.log(c0);
+    // console.log(c1);
     for (let i = y0; i < y1; i++) {
         for (let j = x0; j < x1; j++) {
             if (c0.canvas.data[i] == null) {
@@ -2965,24 +2965,20 @@ blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     let data = new Uint8Array(w * h);
     let oneD = 0;
     let gc = ge.getTab(c0).canvas.data;
-    let sums = 0;
-    // Transforming the data into a one dimension array.
+    // Transforming the canvas data into a one-dimensional array.
     if (gc.length > 0) {
         for (let i = y0; i < y1; i++) {
             for (let j = x0; j < x1; j++) {
                 for (let k = 0; k < 63; k++) {
-                    let x = j * 7 + (k % 7);
-                    let y = i * 9 + Math.floor(k / 7);
-                    let oneD = Math.floor(x + (y * (x1 - x0) * 7));
+                    let x = (j - x0) * 7 + (k % 7);
+                    let y = (i - y0) * 9 + Math.floor(k / 7);
+                    let oneD = Math.floor(x + (y * w));
                     data[oneD] = (gc[i] && gc[i][j] && gc[i][j][k]) ? 255 : 0;
-                    // sums += data[oneD];
                 }
             }
         }
     }
-        // console.log("sums: " + sums);
     // Blurring the array
-    let data2 = new Uint8Array(w * h);
     function getValue(x, y) {
         let v;
         if (x >= 0 && x < w && y >= 0 && y < h) {
@@ -3003,6 +2999,26 @@ blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
         n.push(getValue(x - 1, y + 1));
         n.push(getValue(x, y + 1));
         n.push(getValue(x + 1, y + 1));
+        n.push(getValue(x - 2, y - 2));
+        n.push(getValue(x - 1, y - 2));
+        n.push(getValue(x, y - 2));
+        n.push(getValue(x + 1, y - 2));
+        n.push(getValue(x + 2, y - 2));
+        
+        
+        n.push(getValue(x + 2, y - 1));
+        n.push(getValue(x + 2, y));
+        n.push(getValue(x + 2, y + 1));
+        n.push(getValue(x + 2, y + 2));
+        
+        n.push(getValue(x + 1, y + 2));
+        n.push(getValue(x, y + 2));
+        n.push(getValue(x - 1, y + 2));
+        n.push(getValue(x - 2, y + 2));
+        
+        n.push(getValue(x - 2, y + 1));
+        n.push(getValue(x - 2, y));
+        n.push(getValue(x - 2, y - 1));
         return n;
     };
     blur = function() {
@@ -3018,31 +3034,36 @@ blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
                         n++;
                     }
                 }
-                let newValue = data[oneD] * 0 + (sum / n * 1);
+                let newValue = data[oneD] * 0.3 + (sum / n * 1);
                 data2[oneD] = Math.min(newValue, 255);
                 // sums += newValue;
             }
         }
     };
     let dataOriginal = Uint8Array.from(data);
-    for (let i = 0; i < 64; i++) {
+    let data2;
+    for (let i = 0; i < 4; i++) {
         data2 = new Uint8Array(w * h);
         blur();
         data = data2;
     }
+    //  Dithering the blurred array
     let dith = Uint8Array.from(data2);
     for (let i = 0; i < w * h; i++) {
         let newPixel = dith[i] < 129 ? 0 : 255;
         let err = Math.floor((dith[i] - newPixel) / 8);
         dith[i] = newPixel;
-        dith[i       + 1 ] += err;
-        dith[i       + 2 ] += err;
-        dith[i + 1*w - 1 ] += err;
-        dith[i + 1*w     ] += err;
-        dith[i + 1*w + 1 ] += err;
-        dith[i + 2*w     ] += err;
-        sums += dith[i];
+        let m = Math.floor(Math.random() * 15);
+        // m = 3;
+        dith[i       + 1*m ] += err;
+        dith[i       + 2*m ] += err;
+        dith[i + 1*m*w - 1*m ] += err;
+        dith[i + 1*m*w     ] += err;
+        dith[i + 1*m*w + 1*m ] += err;
+        dith[i + 2*m*w     ] += err;
+        // sums += dith[i];
     }
+    //  Drawing the dithered array back into the visible canvas.
     let canvasDestination = ge.getTab(c1).canvas.data;
     paintStatic = function(fx, fy, sx, sy, val = 1) {
         let c = canvasDestination;
@@ -3061,16 +3082,15 @@ blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
             c[y][fx][xy] = val;
         }
     };
-    for (let x = 0; x < w; x++) {
-        for (let y = 0; y < h; y++) {
-            let oneD = x + (y * w);
+    for (let x = x2 * 7; x < w + x2 * 7; x++) {
+        for (let y = y2 * 9; y < h + y2 * 9; y++) {
+            let oneD = x - (x2 * 7) + ((y - y2*9) * w);
             let val = (dith[oneD] == 255) ? 1 : 0;
-            let val2 = (dataOriginal[oneD] == 255) ? 1 : 0;
+            // let val2 = (dataOriginal[oneD] == 255) ? 1 : 0;
             // val = (Math.round(Math.random() * 1)) ? val : Math.min(val2 + val, 1);
             paintStatic(Math.floor(x/7),Math.floor(y/9), x%7,y%9, val);
         }
     }
-    console.log("sums: " + sums);
     return data;
 };
-sss = blurCanvas("vibra.scd", 0, 0, 109, 0 + 25, "sketch.js", 0, 0);
+sss = blurCanvas("sna.scd", 0, 569, 109, 569 + 25, "sketch.js", 0, 0);
