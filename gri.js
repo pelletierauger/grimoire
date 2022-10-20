@@ -219,6 +219,16 @@ GrimoireEditor.prototype.canvasToCanvas = function(c0, x0, y0, x1, y1, c1, x, y)
 };
 
 
+GrimoireEditor.prototype.c2c = function(y0, y1, c0, c1) {
+    if (c0 == null) {
+        c0 = this.t.name;
+    }
+    if (c1 == null) {
+        c1 = this.t.name;
+    }
+    this.canvasToCanvas(c0, 0, y0, 109, y0 + 25, c1, 0, y1);
+};
+
 GrimoireEditor.prototype.canvasToCanvasAdd = function(c0, x0, y0, x1, y1, c1, x, y) {
     c0 = this.getTab(c0).canvas.data;
     c1 = this.getTab(c1).canvas.data;
