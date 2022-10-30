@@ -220,6 +220,12 @@ GrimoireEditor.prototype.canvasToCanvas = function(c0, x0, y0, x1, y1, c1, x, y)
 
 
 GrimoireEditor.prototype.c2c = function(y0, y1, c0, c1) {
+    if (y0 == null) {
+        y0 = ge.t.scroll.y;
+    }
+    if (y1 == null) {
+        y1 = ge.t.scroll.y + 25;
+    }
     if (c0 == null) {
         c0 = this.t.name;
     }
@@ -274,6 +280,13 @@ GrimoireEditor.prototype.canvasToCanvasSubtract = function(c0, x0, y0, x1, y1, c
 
 GrimoireEditor.prototype.clearCanvas = function() {
     this.t.canvas = new GrimoireCanvas();
+};
+
+GrimoireEditor.prototype.clearTab = function() {
+    let t = this.t.data;
+    for (let i = 0; i < t.length; i++) {
+        t[i] = "";
+    }
 };
 
 GrimoireEditor.prototype.eraseCanvas = function(c, x0, y0, x1, y1) {
