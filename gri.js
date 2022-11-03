@@ -74,6 +74,7 @@ let GrimoireEditor = function() {
     this.paintingFunction = paintUnit;
     this.paintingOther = false;
     this.paintingOffsetY = 0;
+    this.lastOther = null;
 };
 
 GrimoireEditor.prototype.paintOther = function(s, offsetY = 0) {
@@ -84,6 +85,7 @@ GrimoireEditor.prototype.paintOther = function(s, offsetY = 0) {
     this.paintingOther = true;
     this.paintingOffsetY = offsetY;
     mode = 2;
+    this.lastOther = [s, offsetY];
 };
 
 GrimoireEditor.prototype.paintSame = function() {
@@ -91,6 +93,16 @@ GrimoireEditor.prototype.paintSame = function() {
     this.paintingOther = false;
     this.paintingOffsetY = 0;
     mode = 2;
+};
+
+GrimoireEditor.prototype.toggleOther = function() {
+    if (this.lastOther !== null) {
+        if (this.paintingOther) {
+            this.paintSame();
+        } else {
+            this.paintOther(this.lastOther[0], this.lastOther[1]);
+        }
+    }
 };
 
 GrimoireEditor.prototype.revertCanvas = function() {
@@ -2805,6 +2817,8 @@ paintingKeys = function(e) {
         resetBrushPositions(); 
     } else if (s == "r") {
         brushRandom = !brushRandom;
+    } else if (s == "o") {
+        ge.toggleOther();
     }
 };
 

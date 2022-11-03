@@ -16,10 +16,32 @@ drawTerminal = function(selectedProgram) {
     // ———————————————————————————————————————————————————————————————
     //  Grimoire drawing algorithm
     // ———————————————————————————————————————————————————————————————
-    
+    // 
     vertices = [];
     let num = 0;
     let colors = [];
+    // 
+    if (ge.activeTab !== null && ge.t.darkPixels) {
+        let d = ge.t.darkPixels.canvas.data;
+        let m = (mode == 2) ? 0 : 2;
+        for (let y = 0; y < 22 + 1 + m; y++) {
+            for (let x = 0; x < 109; x++) {
+                if (d[y + ge.t.scroll.y] && d[y + ge.t.scroll.y][x]) {
+                    for (let yy = 0; yy < 9; yy++) {
+                        for (let xx = 0; xx < 7; xx++) {
+                            if (d[y + ge.t.scroll.y][x][xx + (yy * 7)]) {
+                                let sc = 0.8;
+                                vertices.push(((x * 7 + xx) * 0.00303 - 1.155 + nx) * sc, ((y * 9 + yy) * -0.0095 + 1.062 + ny) * sc, 11 * sc, 1);
+                                num++;
+                                colors.push(0, 0, 0);   
+                            }
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+    // 
     if (ge.brushPositions && mode == 2) {
         for (let i = 0; i < patterns.length; i++) {
             for (let y = 0; y < 18; y++) {
