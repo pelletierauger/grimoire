@@ -50,6 +50,7 @@ tab = function(s) {
     if (!ge.paintingOther) {
         ge.activeCanvas = ge.t.canvas;
     }
+    return ge.activeTab;
 }
 
 tb = function(s) {
@@ -202,17 +203,19 @@ GrimoireEditor.prototype.canvasToCanvas = function(c0, x0, y0, x1, y1, c1, x, y)
     // console.log(c1);
     for (let i = y0; i < y1; i++) {
         for (let j = x0; j < x1; j++) {
-            if (c0.canvas.data[i] == null) {
-                c1.canvas.data[y + i - y0] = [];
-            } else {
-                if (c1.canvas.data[y + i - y0] == null) {
+            if (x + j - x0 < 109) {
+                if (c0.canvas.data[i] == null) {
                     c1.canvas.data[y + i - y0] = [];
-                }
-                if (c0.canvas.data[i][j] == null) {
-                    c1.canvas.data[y + i - y0][x + j - x0] = null;
                 } else {
-                    c1.canvas.data[y + i - y0][x + j - x0] = c0.canvas.data[i][j].slice();
-                }                
+                    if (c1.canvas.data[y + i - y0] == null) {
+                        c1.canvas.data[y + i - y0] = [];
+                    }
+                    if (c0.canvas.data[i][j] == null) {
+                        c1.canvas.data[y + i - y0][x + j - x0] = null;
+                    } else {
+                        c1.canvas.data[y + i - y0][x + j - x0] = c0.canvas.data[i][j].slice();
+                    }                
+                }
             }
         }
     }
