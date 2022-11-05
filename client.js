@@ -680,6 +680,15 @@ function interpretAppControl(value) {
                 data: ""
             });
             let t = new Tab(files.scd[files.scd.length - 1], "scd");
+            let t2 = new GrimoireTab({
+                name: newMatch[2],
+                lang: "scd",
+                scroll: {x: 0, y: 0},
+                carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],
+                data: [""],
+                canvasData: null,
+                canvasPath: sketchFolder + "/paintings/" + newMatch[2] + ".txt"
+            });
         } else if (newMatch[2].substr(newMatch[2].length - 3) == ".js") {
             for (let i = 0; i < files.js.length; i++) {
                 if (files.js[i].name == newMatch[2]) {
@@ -703,6 +712,15 @@ function interpretAppControl(value) {
                 data: ""
             });
             let t = new Tab(files.js[files.js.length - 1], "js");
+            let t2 = new GrimoireTab({
+                name: newMatch[2],
+                lang: "js",
+                scroll: {x: 0, y: 0},
+                carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],
+                data: [""],
+                canvasData: null,
+                canvasPath: sketchFolder + "/paintings/" + newMatch[2] + ".txt"
+            });
         } else {
             logJavaScriptConsole("Filenames must end with .scd or .js.");
         }
