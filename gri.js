@@ -84,7 +84,7 @@ GrimoireEditor.prototype.paintOther = function(s, offsetY = 0) {
     }
     this.paintingOther = true;
     this.paintingOffsetY = offsetY;
-    mode = 2;
+    // mode = 2;
     this.lastOther = [s, offsetY];
 };
 
@@ -2948,56 +2948,55 @@ BrushFromString3 = function(s = "a", x = [1, 1, 1, 1, 1, 1, 1], y = [1, 1, 1, 1,
     return br;
 };
 
+// Basic xFade with white noise
+
 makeXFadeArray = function() {
     xFadeArray = new Uint8Array(109 * 25 * 7 * 9);
     for (let y = 0; y < 25 * 9; y++) {
         for (let x = 0; x < 109 * 7; x++) {
-            xFadeArray[x + (y * 25 * 9)] = Math.floor(Math.random() * 256);
+            xFadeArray[x + (y * 109 * 7)] = Math.floor(Math.random() * 256);
         }
     }
 };
+// makeXFadeArray();
+
+// Fancier xFade with OpenSimplex noise
+
+makeXFadeArray = function() {
+    xFadeArray = new Uint8Array(109 * 25 * 7 * 9);
+    for (let y = 0; y < 25 * 9; y++) {
+        for (let x = 0; x < 109 * 7; x++) {
+            let nA = Math.floor((openSimplex.noise2D(x * 0.05, y * 0.05) * 0.5 + 0.5) * 256);
+            let nB = Math.floor(Math.random() * 256);
+            let nC = Math.floor(lerp(nA, nB, 0.25));
+            xFadeArray[x + (y * 109 * 7)] = nC;
+        }
+    }
+};
+makeXFadeArray();
 
 
-GrimoireEditor.prototype.xFadeCanvases = function(c0, x0, y0, x1, y1, c1, x, y, c2, x2, y2, interpolation) {
-    c0 = this.getTab(c0).canvas.data;
-    c1 = this.getTab(c1).canvas.data;
-    c2 = this.getTab(c2).canvas.data;
+GrimoireEditor.prototype.xFadeCanvases = function(cA, xA0, yA0, xA1, yA1, cB, xB, yB, cC, xC, yC, interpolation) {
+    cA = this.getTab(cA).canvas.data;
+    cB = this.getTab(cB).canvas.data;
+    cC = this.getTab(cC).canvas.data;
     interpolation = Math.floor(interpolation * 256);
-    // console.log(c0);
-    // console.log(c1);
-    for (let i = y0; i < y1; i++) {
-        for (let j = x0; j < x1; j++) {
-            // if (c0.canvas.data[i] == null) {
-            //     c1.canvas.data[y + i - y0] = [];
-            // } else {
-            //     if (c1.canvas.data[y + i - y0] == null) {
-            //         c1.canvas.data[y + i - y0] = [];
-            //     }
-            //     if (c0.canvas.data[i][j] == null) {
-            //         c1.canvas.data[y + i - y0][x + j - x0] = null;
-            //     } else {
-            //         c1.canvas.data[y + i - y0][x + j - x0] = c0.canvas.data[i][j];
-            //     }                
-            // }
+    for (let i = yA0; i < yA1; i++) {
+        for (let j = xA0; j < xA1; j++) {
             for (let k = 0; k < 7 * 9; k++) {
-                let x = j * 7 + (k % 7);
-                let y = i * 9 + Math.floor(k / 7);
+                let x = (j - xA0) * 7 + (k % 7);
+                let y = (i - yA0) * 9 + Math.floor(k / 7);
                 let oneD = x + (y * 109 * 7);
                 let n = xFadeArray[oneD];
                 if (n < interpolation) {
-                    c2.canvas.data[y2 + i - y0][x2 + j - x0][k] = c0.canvas.data[i][j][k];
+                    cC[yC + i - yA0][xC + j - xA0][k] = cA[i][j][k];
                 } else {
-                    c2.canvas.data[y2 + i - y0][x2 + j - x0][k] = c1.canvas.data[y + i - y0][x + j - x0][k];
+                    cC[yC + i - yA0][xC + j - xA0][k] = cB[yB + i - yA0][xB + j - xA0][k];
                 }
-                // let A = c2[i][j][k];
-                // let B = c2[i][j][k];
             }
         }
     }
 };
-
-
-
 
 GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     let w = (x1 - x0) * 7;
