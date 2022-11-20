@@ -2964,9 +2964,10 @@ makeXFadeArray = function() {
 
 makeXFadeArray = function() {
     xFadeArray = new Uint8Array(109 * 25 * 7 * 9);
+    let lerp = function(e,t,r){return r*(t-e)+e};
     for (let y = 0; y < 25 * 9; y++) {
         for (let x = 0; x < 109 * 7; x++) {
-            let nA = Math.floor((openSimplex.noise2D(x * 0.05, y * 0.05) * 0.5 + 0.5) * 256);
+            let nA = Math.floor((openSimplex.noise2D(x * 0.025, y * 0.025) * 0.5 + 0.5) * 256);
             let nB = Math.floor(Math.random() * 256);
             let nC = Math.floor(lerp(nA, nB, 0.25));
             xFadeArray[x + (y * 109 * 7)] = nC;
