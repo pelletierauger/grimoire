@@ -2866,7 +2866,7 @@ BrushFromString = function(s = "a", x = 1, y = 1) {
         data.push([]);
         for (let j = 0; j < (x * 7) * s.length; j++) {
             let g = getGlyph(s[Math.floor(j/(x * 7))]);
-            data[i][j] = g[Math.floor(i/y)][Math.floor(j/x) - Math.floor(j/(x * 7))*7];
+            data[i][j] = parseInt(g[Math.floor(i/y)][Math.floor(j/x) - Math.floor(j/(x * 7))*7]);
         }
     }
     let o = {
