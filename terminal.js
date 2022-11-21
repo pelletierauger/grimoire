@@ -3483,6 +3483,43 @@ paint = function(val = 1) {
     }
 }
 
+paintStatic = function(c, x, y, brush, pattern) {
+    c = ge.getTab(c).canvas.data;
+    pattern = pattern.grid;
+    x = x - brush.anchor[0];
+    y = y - brush.anchor[1];
+    let pdim = [pattern[0].length, pattern.length];
+    for (let j = y; j < y + brush.data.length; j++) {
+        for (let i = x; i < x + brush.data[0].length; i++) {
+            if (brush.data[j - y][i - x]) {
+                let fx, fy, sx, sy;
+                fx = Math.floor(i / 7);
+                fy = Math.floor(j / 9);
+                sx = i % 7;
+                sy = j % 9;
+                let vv = pattern[Math.floor(j * patternScale) % pdim[1]][Math.floor(i * patternScale) % pdim[0]];    
+                paintUnit(fx, fy, sx, sy, vv);
+            }
+        }
+    }
+    function paintUnit(fx, fy, sx, sy, val = 1) {
+        let y = fy;
+        let xy = sx + (sy * 7);
+        if (c[y]) {
+            if (c[y][fx]) {
+                c[y][fx][xy] = val;
+            } else {
+                c[y][fx] = [];
+                c[y][fx][xy] = val;
+            }
+        } else {
+            c[y] = [];
+            c[y][fx] = [];
+            c[y][fx][xy] = val;
+        }
+    };
+};
+
 typeIndex = 0;
 brushIndex = 0;
 quill = [];
