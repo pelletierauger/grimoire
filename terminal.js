@@ -3491,7 +3491,7 @@ paintStatic = function(c, x, y, brush, pattern) {
     let pdim = [pattern[0].length, pattern.length];
     for (let j = y; j < y + brush.data.length; j++) {
         for (let i = x; i < x + brush.data[0].length; i++) {
-            if (brush.data[j - y][i - x]) {
+            if (j >= 0 && i >= 0 && i < (109 * 7) && brush.data[j - y][i - x]) {
                 let fx, fy, sx, sy;
                 fx = Math.floor(i / 7);
                 fy = Math.floor(j / 9);
