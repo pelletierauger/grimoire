@@ -3,6 +3,8 @@ drawTerminal = function(selectedProgram) {
     // let hh = (window.innerHeight - canH) * 0.5;
     // let mx = map(mouse.x, 0, document.body.clientWidth, -1, 1);
     // let my = map(mouse.y, hh, canH + hh, 1, -1);
+    let nx = openSimplex.noise2D(0, drawCount * 5e-2) * 0.0025;
+    let ny = openSimplex.noise2D(0, drawCount * 5e-2 + 1e5) * 0.0025;
     if (ge.playback) {
         ge.play();
     }

@@ -270,7 +270,7 @@ function init() {
             // griArr = files.js[8].data.split("\n");
         }
         // console.log("All the tabs are loaded at this point.");
-        
+        setTabs();
         // tl();
         tabsLoaded = true;
         if (batchExport) {
