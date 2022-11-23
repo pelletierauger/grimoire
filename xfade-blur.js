@@ -1,9 +1,9 @@
 ssss = new Uint8Array(109 * 25 * 7 * 9);
 for (let i = 0; i < sss.length; i++) {
-            let nA = sss[i];
-            let nB = Math.floor(Math.random() * 256);
-            let nC = Math.floor(lerp(nA, nB, 0.25));
-            ssss[i] = nC;
+    let nA = sss[i];
+    let nB = Math.floor(Math.random() * 256);
+    let nC = Math.floor(lerp(nA, nB, 0.25));
+    ssss[i] = nC;
 }
 
 GrimoireEditor.prototype.xFadeCanvases = function(cA, xA0, yA0, xA1, yA1, cB, xB, yB, cC, xC, yC, interpolation) {
