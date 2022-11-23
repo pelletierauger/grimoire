@@ -47,12 +47,13 @@ tab = function(s, y) {
     //     }
     // }
     ge.t = ge.activeTab;
-    if (y !== null) {
+    if (y) {
         ge.t.scroll.y = y;
     }
     if (!ge.paintingOther) {
         ge.activeCanvas = ge.t.canvas;
     }
+    nt = 0;
     return ge.activeTab;
 }
 

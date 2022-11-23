@@ -133,7 +133,7 @@ drawTerminal = function(selectedProgram) {
     }
 }
 //     
-    for (let y = 0; y < 22 + 3; y++) {
+    for (let y = 0; y < Math.floor(nt / 109); y++) {
         for (let x = 0; x < 109; x++) {
             let char;
             let caret = false;
@@ -228,6 +228,7 @@ drawTerminal = function(selectedProgram) {
             // console.log(maxloopy);
         }
     }
+    if (nt < 2725) {nt = Math.min(2725, nt + 100)};
     // First idea for visualizing some data
     // for (let x = 0; x < 30; x++) {
     //      for (let y = 0; y < 15; y++) {
