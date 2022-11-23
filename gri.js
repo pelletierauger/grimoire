@@ -9,7 +9,7 @@ swatchesArr = "░▒▓█▀▄▌▐┌─┬┐│┤┘┴└├┼╔═�
 // files.js[8].data = griArr.join("\n")
 
 
-tab = function(s) {
+tab = function(s, y) {
     if (s == null) {
         ge.activeTab = null;
         mode = 0;
@@ -47,6 +47,9 @@ tab = function(s) {
     //     }
     // }
     ge.t = ge.activeTab;
+    if (y !== null) {
+        ge.t.scroll.y = y;
+    }
     if (!ge.paintingOther) {
         ge.activeCanvas = ge.t.canvas;
     }
@@ -54,10 +57,11 @@ tab = function(s) {
 }
 
 tb = function(s) {
-    tab(s);
+    let t = tab(s);
     if (s !== null && ge.activeTab !== null) {
         mode = 1;
     }
+    return t;
 };
 
 let GrimoireEditor = function() {
@@ -347,6 +351,13 @@ let GrimoireTab = function(o) {
     this.headState = null;
     this.attachedHeadState = true;
     ge.tabs.push(this);
+};
+
+GrimoireTab.prototype.clear = function() {
+    let t = this.data;
+    for (let i = 0; i < t.length; i++) {
+        t[i] = "";
+    }
 };
 
 GrimoireTab.prototype.saveCanvas = function() {
