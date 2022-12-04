@@ -4012,6 +4012,9 @@ for (let y=0;y<fence5.grid.length;y++){
 full = new Pattern("full");
 full.grid = [[1]];
 
+empty = new Pattern("empty");
+empty.grid = [[0]];
+
 // polka25
 
 patterns = [

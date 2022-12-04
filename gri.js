@@ -8,6 +8,7 @@ swatchesArr = "░▒▓█▀▄▌▐┌─┬┐│┤┘┴└├┼╔═�
 
 // files.js[8].data = griArr.join("\n")
 
+nt = 0;
 
 tab = function(s, y) {
     if (s == null) {
@@ -53,9 +54,15 @@ tab = function(s, y) {
     if (!ge.paintingOther) {
         ge.activeCanvas = ge.t.canvas;
     }
-    nt = 0;
     return ge.activeTab;
 }
+
+go_to = function(s, y) {
+    window.setTimeout(function() {  
+        nt = 0;  
+        tab(s, y);
+    }, 500);
+};
 
 tb = function(s) {
     let t = tab(s);
