@@ -16,8 +16,10 @@ tab = function(s, y) {
         mode = 0;
         return;
     }
+    let match = false;
     for (let i = 0; i < ge.tabs.length; i++) {
         if (ge.tabs[i].name == s) {
+            match = true;
             ge.activeTab = ge.tabs[i];
             if (ge.activeTab.canvas == null) {
                 ge.activeTab.canvas = new GrimoireCanvas();
@@ -47,22 +49,28 @@ tab = function(s, y) {
     //         resetBrushPositions();
     //     }
     // }
-    ge.t = ge.activeTab;
-    if (y) {
-        ge.t.scroll.y = y;
+    if (match) {
+        ge.t = ge.activeTab;
+        if (y) {
+            ge.t.scroll.y = y;
+        }
+        if (!ge.paintingOther) {
+            ge.activeCanvas = ge.t.canvas;
+        }
+        return ge.activeTab;
+    } else {
+        return null;
     }
-    if (!ge.paintingOther) {
-        ge.activeCanvas = ge.t.canvas;
-    }
-    return ge.activeTab;
 }
 
 go_to = function(s, y) {
     window.setTimeout(function() {  
-        nt = 0;  
-        tab(s, y);
-        if (s !== null && ge.activeTab !== null) {
-            mode = 1;
+        let t = tab(s, y);
+        if (t) {
+            nt = 0;
+            if (s !== null && ge.activeTab !== null) {
+                mode = 1;
+            }
         }
     }, 125);
 };
