@@ -61,7 +61,10 @@ go_to = function(s, y) {
     window.setTimeout(function() {  
         nt = 0;  
         tab(s, y);
-    }, 500);
+        if (s !== null && ge.activeTab !== null) {
+            mode = 1;
+        }
+    }, 125);
 };
 
 tb = function(s) {
@@ -863,6 +866,10 @@ GrimoireTab.prototype.select = function() {
     }
 };
 
+GrimoireTab.prototype.tick = function(s) {
+    
+};
+
 
 GrimoireTab.prototype.display = function() {
     bindFrameBuffer(texture, framebuf);
@@ -877,7 +884,7 @@ GrimoireTab.prototype.display = function() {
     // drawAlligatorQuietVert(currentProgram);
     currentProgram = getProgram("new-flickering-dots");
     gl.useProgram(currentProgram);
-    // drawAlligatorQuiet(currentProgram);
+    drawAlligatorQuiet(currentProgram);
     currentProgram = getProgram("rounded-square");
     time = gl.getUniformLocation(currentProgram, "time"); 
     gl.useProgram(currentProgram);

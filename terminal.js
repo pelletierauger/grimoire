@@ -228,7 +228,7 @@ drawTerminal = function(selectedProgram) {
             // console.log(maxloopy);
         }
     }
-    if (nt < 2725) {nt = Math.min(2725, nt + 100)};
+    if (nt < 2725) {nt = Math.min(2725, nt + 200)};
     // First idea for visualizing some data
     // for (let x = 0; x < 30; x++) {
     //      for (let y = 0; y < 15; y++) {
