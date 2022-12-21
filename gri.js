@@ -18,7 +18,7 @@ tab = function(s, y) {
     }
     let match = false;
     for (let i = 0; i < ge.tabs.length; i++) {
-        if (ge.tabs[i].name == s && (ge.tabs[i].name !== ge.t.name)) {
+        if (ge.tabs[i].name == s && (ge.activeTab == null || ge.tabs[i].name !== ge.t.name)) {
             match = true;
             ge.activeTab = ge.tabs[i];
             if (ge.activeTab.canvas == null) {
