@@ -9,9 +9,9 @@ drawTerminal = function(selectedProgram) {
         ge.play();
     }
     fmouse[0] = constrain(Math.floor(map(mouse.x, 78, 1190, 0, 108)), 0, 109);
-    fmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 25)), 0, 24);
+    fmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 25)), 0, 25);
     pmouse[0] = constrain(Math.floor(map(mouse.x, 78, 1190, 0, 108 * 7)), 0, 109 * 7);
-    pmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 25 * 9)), 0, 24 * 9);
+    pmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 25 * 9)), 0, 25 * 9);
     smouse[0] = Math.floor(pmouse[0] % 7);
     smouse[1] = Math.floor(pmouse[1] % 9);
     //scdDisplay();
@@ -44,7 +44,7 @@ drawTerminal = function(selectedProgram) {
         }
     }
     // 
-    if (ge.brushPositions && mode == 2) {
+    if (ge.brushPositions && mode == 2 && showPatterns) {
         for (let i = 0; i < patterns.length; i++) {
             for (let y = 0; y < 18; y++) {
                 let r = 7 * 5 - 2;
@@ -182,7 +182,7 @@ drawTerminal = function(selectedProgram) {
             }
             let paint = false;
             let canvas = null;
-            if (ge.activeTab !== null && (y < 20 + 3 || mode == 1)) {
+            if (ge.activeTab !== null && (y < 20 + 3 || mode == 1 || (mode == 2 && !showPatterns))) {
                 if (ge.activeTab.canvas !== null) {
                     canvas = ge.activeTab.canvas.data;
                     if (canvas[y + ge.activeTab.scroll.y]) {
@@ -3313,7 +3313,8 @@ downmouse = function(e) {
         }
     }
     if (mode == 2) {
-        if (fmouse[1] >= 23) {
+        
+        if (fmouse[1] >= 23 && showPatterns) {
             // ge.activePattern = patterns[Math.floor(fmouse[0] / 5)]; 
             ge.activePattern = patterns[Math.floor(pmouse[0] / (7*5-2))]; 
             resetBrushPositions();
@@ -3371,7 +3372,8 @@ mouseDragged = function(e) {
             }
         }
     }
-    if (mode == 2 && fmouse[1] < 23) {
+    let yPaintMax = (showPatterns) ? 23 : 25;
+    if (mode == 2 && fmouse[1] < yPaintMax) {
         let val = (e.shiftKey) ? 0 : 1;
         // paint(fmouse[0], fmouse[1], smouse[0], smouse[1], val);
         paint(val);
@@ -3471,7 +3473,8 @@ paintUnitSubtract = function(fx, fy, sx, sy, val = 1) {
 
 
 paint = function(val = 1) {
-    for (let y = 0; y < ge.brushPositions.length - (2 * 9); y++) {
+    let pat = (showPatterns) ? 2 : 0;
+    for (let y = 0; y < ge.brushPositions.length - (pat * 9); y++) {
         for (let x = 0; x < ge.brushPositions[y].length; x++) {
             let r = (brushRandom) ? Math.round(Math.random()) : true;
             if (ge.brushPositions[y][x] && r) {

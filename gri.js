@@ -10,6 +10,8 @@ swatchesArr = "░▒▓█▀▄▌▐┌─┬┐│┤┘┴└├┼╔═�
 
 nt = 0;
 
+showPatterns = true;
+
 tab = function(s, y) {
     if (s == null) {
         ge.activeTab = null;
@@ -2785,7 +2787,8 @@ resetBrushPositions = function() {
         }
     }
     // console.log("reset!");
-    if (fmouse[1] < 23) {
+    let yPaintMax = (showPatterns) ? 23 : 25;
+    if (fmouse[1] < yPaintMax) {
         let b = ge.activeBrush;
         let tx = (fmouse[0] * 7) + smouse[0];
         let tox = Math.max(0, tx - b.anchor[0]);
@@ -2806,7 +2809,7 @@ resetBrushPositions = function() {
         // let foy = Math.floor(toy / 9);
         // let soy = toy % 9;
         // let biymax = Math.min(b.data.length, 180 - (toy + b.data.length));
-        let biymax = b.data.length - (Math.max((ty - b.anchor[1] + b.data.length) - 207, 0));
+        let biymax = b.data.length - (Math.max((ty - b.anchor[1] + b.data.length) - (yPaintMax * 9), 0));
         // logJavaScriptConsole(biymax);
         // logJavaScriptConsole("ty: " + ty + " ,  b.anchor[1] :" +  b.anchor[1] + " , biy: " + biy + ", biymax: " + biymax);
         for (let y = biy; y < biymax; y++) {
@@ -2919,7 +2922,11 @@ paintingKeys = function(e) {
         brushRandom = !brushRandom;
     } else if (s == "o") {
         ge.toggleOther();
+    } else if (s == "Tab") {
+        showPatterns = !showPatterns;
+        resetBrushPositions();
     }
+    // console.log(s);
 };
 
 
