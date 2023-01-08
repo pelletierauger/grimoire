@@ -2925,6 +2925,10 @@ paintingKeys = function(e) {
     } else if (s == "Tab") {
         showPatterns = !showPatterns;
         resetBrushPositions();
+    } else if (s == "PageUp") {
+        ge.t.scroll.y = Math.max(0, ge.t.scroll.y - 25);
+    } else if (s == "PageDown") {
+        ge.t.scroll.y += 25;
     }
     // console.log(s);
 };
