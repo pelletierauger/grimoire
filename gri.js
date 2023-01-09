@@ -2895,10 +2895,10 @@ paintingKeys = function(e) {
     let s = e.key;
     let t = ge.activeTab;
     if (s == "ArrowDown") {
-        t.moveCaretsY(1);
+        // t.moveCaretsY(1);
         t.scroll.y++;
     } else if (s == "ArrowUp") {
-        t.moveCaretsY(-1);
+        // t.moveCaretsY(-1);
         t.scroll.y = Math.max(0, t.scroll.y - 1);
     } else if (s == "s") {
         switch(patternScale) {
