@@ -4110,3 +4110,95 @@ grimo = [`  \\▓▓░/ /▓▓▓▓░░░/                       \\▓▓�
 
 
 lac = ["▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░▓▓▓▓▓▓▓▓    ","▓▓▓▓▓▓░▓▓▓▓▓▓▓▓░▓▓▓▓▓▓░▓░▓▓▓▓▓▓▓░▓▓▓░░░░░░░░░░░░░░▓▓▓▓▓▓▓▓░░░░░░░░░░▓▓░░░░░░░ ░░░░░▓░░░    ","▓▓░▓░▓▓▓▓░░▓░▓▓▓░▓░░░▓▓▓▓▓▓▓▓▓▓░▓▓░░░IIIIIIII░░░░░░░▓▓▓░░░░        ░░░░            ░░     ","▓▓▓▓▓░▓▓▓▓▓░▓░▓░░░░░▓▓▓▓▓▓▓▓░░▓▓░░░I         IIIII░░IIII                               ","▓▓▓▓▓▓▓░▓▓░▓░▓▓░░▓░▓▓▓▓▓░▓▓░▓▓▓░░I               III          ((     (      {{  _~ ~~~~","▓▓░▓▓▓░░▓░░▓▓░▓▓░░░▓▓▓▓▓▓▓▓▓▓░░II        (((               (~~~~{{{      __________~~~~","▓▓▓▓▓░░░░░░░▓▓▓░▓▓▓░▓░░▓░▓▓░IIII        (  {{(~~~~    (~~~~~~     ~~ ___(    __     ~   ","▓▓▓▓▓░▓░░░▓▓▓░░▓░▓░▓▓░▓▓▓▓░░III       ~(~~~(~~~   ~~~~~~~~~~~ _____~                 ~~ ","▓▓▓▓░░▓░░▓░▓▓░░▓▓░▓▓▓▓▓▓▓░░III       (~  ~~~ ~(_~~~~~~~~~~~                    ~~~~~~~    ","░▓▓▓▓▓▓░░▓░▓░▓▓▓░░▓▓░▓▓▓░░III      (~~  ~~~~   ~~~~~~                   ~ ~~~~~~~~         ","▓▓▓▓▓▓▓░░░░▓▓░░▓▓▓▓░▓▓░░░III      ~~~~~~~   (  ~                                    ~~~      ","▓▓░▓▓░░▓░░▓▓▓▓░▓░▓▓▓░▓░░░░I      (~~~~~                                                      ","▓░▓▓▓░░▓░░▓░▓░▓▓░▓▓░▓▓░░░░I      (~~~~~    (      (                             ______     ","▓▓░░▓▓▓▓░░░░▓▓░▓▓▓▓░▓░▓▓▓░░░      {{{(~~~                                   _________      ","▓▓░░▓▓▓▓▓░░░▓░▓▓▓░░▓░░▓▓▓▓░░II         ((~~       (    ~~   (  ____~~~~~_______                          ","▓▓▓░░▓▓░░▓░░▓▓░░▓░░░▓░░▓░▓▓░░░IIIIII      {((((   ~~ (  ~~~~                                             ","▓▓▓▓░░▓▓▓▓░▓░░▓▓░▓▓░░▓▓▓▓▓░▓▓▓▓░░░░░III       ((( ~~~{(~ ~~~~~~~~~~(  ____                ","▓▓▓▓▓▓▓░░░░░░▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░▓▓░░II           (~~ ~~~~~~~~   ~      (      (         ","▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░▓▓▓░░░░░░░░░░░░▓░░░I          ░  (( ~  ~~ ~ ~~~~~~ ░                ","                    .................▓▓▓▓▓▓▓▓0000.  . .   .  .......!.........▓........"];
+
+
+if (false) {
+
+
+    roundedSquare.vertText = `
+    // beginGLSL
+    precision mediump float;
+    attribute vec4 coordinates;
+    attribute vec3 colors;
+    uniform float time;
+    uniform float resolution;
+    varying vec2 myposition;
+    varying vec2 center;
+    varying float alph;
+    varying float size;
+    varying vec3 cols;
+    varying float t;
+    float roundedRectangle (vec2 uv, vec2 pos, vec2 size, float radius, float thickness) {
+        float d = length(max(abs(uv - pos),size) - size) - radius;
+        return smoothstep(0.66, 0.33, d / thickness * 5.0);
+    }
+    void main(void) {
+        gl_Position = vec4(coordinates.x, coordinates.y, 0.0, 1.0);
+        // CRT curve
+        // gl_Position.x += floor(sin(gl_Position.y * 1e2 + time)) * 0.1
+        float disturbance = (floor(sin(gl_Position.y * 5. + time * 0.25 + tan(gl_Position.y * 1e3) * 0.125) * 2.)) * 0.125 * 0.125;
+        float fluctuate = floor(mod(time * 1e5, 100.)/50.);
+        float distr2 = (floor(sin(gl_Position.y * 1e-7 + time * 0.125 + tan(gl_Position.y * 2. + gl_Position.x * 1e-1) * 0.5) * 0.01)) * 10.1 * fluctuate;
+        // distr2 *= 0.;
+        // gl_Position.x += disturbance * 0.1 * (1. + distr2);
+        // gl_Position.x += tan(floor(sin(gl_Position.y * 1e3))) * 0.1;
+        // gl_Position.xy *= (1.0 - distance(gl_Position.xy, vec2(0,0)) * 0.1) * 1.05;
+        center = vec2(gl_Position.x, gl_Position.y);
+        center = 512.0 + center * 512.0;
+        myposition = vec2(gl_Position.x, gl_Position.y);
+        alph = coordinates.w;
+        gl_PointSize = coordinates.z * resolution * 2.;
+        size = gl_PointSize;
+        cols = colors;
+        t = time;
+        float vig = (roundedRectangle(myposition, vec2(0.0, 0.0), vec2(1.85, 1.9) * 0.5, 0.001, 0.05));
+        gl_PointSize *= vig;
+        // gl_PointSize = 25.0 + cos((coordinates.x + coordinates.y) * 4000000.) * 5.;
+        // gl_PointSize = coordinates.z / (alph * (sin(myposition.x * myposition.y * 1.) * 3. + 0.5));
+    }
+    // endGLSL
+`;
+roundedSquare.fragText = `
+    // beginGLSL
+    precision mediump float;
+    // uniform float time;
+    uniform float resolution;
+    varying vec2 myposition;
+    varying vec2 center;
+    varying float alph;
+    varying float size;
+    varying vec3 cols;
+    varying float t;
+    float rand(vec2 co){
+        return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * (2.0 + sin(co.x)));
+    }
+    float roundedRectangleFlicker (vec2 uv, vec2 pos, vec2 size, float radius, float thickness) {
+        // vec2 uv = gl_PointCoord.xy;
+        float t2 = mod(t * 0.125, 3.14159 * 2.) * 1.;
+        // t = 100. + (t * 1e-4);
+        float w = 0.15 + (sin(t2 * 1e-2 * tan(t2 * 2e-2)) + 1.0) * 0.25;
+        float d = length(max(abs(uv - pos), size * 0.5) - size * 0.5) * w - radius * 0.01;
+        float oscFull = (sin(t2) * 0.5 + 0.5) * 3.75 * 0.;
+        float oscScanning = (sin(gl_FragCoord.y * 1e-2 + t2) * 0.5 + 0.5) * 4. * 0.;
+        return smoothstep(2.99 + 1.0 + oscFull + oscScanning, 0.11, d * 10. / thickness * 5.0 * 0.125 * 1.5);
+    }
+    float roundedRectangle (vec2 uv, vec2 pos, vec2 size, float radius, float thickness) {
+        float d = length(max(abs(uv - pos), size) - size) - radius;
+        return smoothstep(0.66, 0.33, d / thickness * 5.0);
+    }
+    void main(void) {
+         // float resolution = 1.0;
+         vec2 screenSize = vec2(2560.0, 1440.0) * resolution;
+         vec2 uv = gl_PointCoord.xy;
+        uv = uv * 2. - 1.;
+        float color = roundedRectangleFlicker(uv, vec2(0.0, 0.0), vec2(0.125, 0.35) * 0.5, 0.1, 0.5);
+        float rando = rand(uv * t) * 0.1;
+        gl_FragColor = vec4(cols, color - rando);
+    }
+    // endGLSL
+`;
+roundedSquare.init();
+
+
+
+}
