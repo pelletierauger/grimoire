@@ -55,6 +55,8 @@ if (!process.argv[2]) {
     }
 }
 
+let startSC = (process.argv[3] && process.argv[3] == "nosc") ? false : true; 
+
 let environsIndex = sketchIndex;
 environsIndex = environsIndex.replace(/<\/head>/g, `${htmlSources.head}
 </head>`);
@@ -465,9 +467,9 @@ function startSclang() {
     });
     // sc.server.boot();
 }
-startSclang();
-
-
+if (startSC) {
+    startSclang();
+}
 
 
 function loadJSONs(folder) {
