@@ -8,7 +8,8 @@ swatchesArr = "░▒▓█▀▄▌▐┌─┬┐│┤┘┴└├┼╔═�
 
 // files.js[8].data = griArr.join("\n")
 
-nt = 0;
+nt = 2725;
+glitchDist = 0;
 
 showPatterns = true;
 
@@ -53,7 +54,7 @@ tab = function(s, y) {
     // }
     if (match) {
         ge.t = ge.activeTab;
-        if (y) {
+        if (y == 0 || y) {
             ge.t.scroll.y = y;
         }
         if (!ge.paintingOther) {
@@ -614,6 +615,22 @@ GrimoireTab.prototype.saveTab = function() {
     }
 };
 
+GrimoireTab.prototype.fetchTab = function() {
+    let t = this;
+    let f = files[t.lang];
+    for (let i = 0; i < f.length; i++) {
+        let ff = f[i];
+        if (t.name == ff.name) {
+            t.data = ff.data.split("\n");
+            t.history = [];
+            t.historyIndex = 0;
+            t.lastEdited = null;
+            t.headState = null;
+            t.attachedHeadState = true;
+        }
+    }
+};
+
 GrimoireTab.prototype.deleteLine = function() {
 
 };
@@ -897,6 +914,7 @@ GrimoireTab.prototype.display = function() {
     drawAlligatorQuiet(currentProgram);
     currentProgram = getProgram("rounded-square");
     time = gl.getUniformLocation(currentProgram, "time"); 
+    disturb = gl.getUniformLocation(currentProgram, "disturb"); 
     gl.useProgram(currentProgram);
     drawTerminal(currentProgram);
     // drawSwirl(currentProgram);
