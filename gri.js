@@ -13,6 +13,12 @@ glitchDist = 0;
 
 showPatterns = true;
 
+fileNameSplit = function(s) {
+    let re = /(?:\.([^.]+))?$/;
+    let e = re.exec(s);
+    return [s.substring(0, e.index), e[1]];
+}
+
 tab = function(s, y) {
     if (s == null) {
         ge.activeTab = null;
@@ -20,10 +26,39 @@ tab = function(s, y) {
         return;
     }
     let match = false;
+    let request = fileNameSplit(s)[0];
+    let current = ((ge.t) && (ge.t.name)) ? fileNameSplit(ge.t.name)[0] : null;
     for (let i = 0; i < ge.tabs.length; i++) {
-        if (ge.tabs[i].name == s && (ge.activeTab == null || ge.tabs[i].name !== ge.t.name)) {
-            match = true;
-            ge.activeTab = ge.tabs[i];
+        let observed = fileNameSplit(ge.tabs[i].name)[0];
+        if (observed == request) {
+            match = i;
+        }
+        // if (ge.tabs[i].name == s && (ge.activeTab == null || ge.tabs[i].name !== ge.t.name)) {
+        //     match = true;
+        //     ge.activeTab = ge.tabs[i];
+        //     if (ge.activeTab.canvas == null) {
+        //         ge.activeTab.canvas = new GrimoireCanvas();
+        //     }
+        //     if (ge.activeBrush == null) {
+        //         ge.activeBrush = types[typeIndex][brushIndex];
+        //     }
+        //     if (ge.activePattern == null) {
+        //         ge.activePattern = patterns[5];
+        //     }
+        //     resetBrushPositions();
+        // }
+    }
+    if (match === 0 || match) {
+        if (request == current) {
+            if (y == 0 || y) {
+                ge.t.scroll.y = y;
+                ge.t.carets = [];
+                ge.t.carets.push({x: ge.t.data[y].length, y: y, dir: 0, curXRef: 0, sel: null});
+            }
+            return ge.t;
+        } else {
+            ge.activeTab = ge.tabs[match];
+            ge.t = ge.activeTab;
             if (ge.activeTab.canvas == null) {
                 ge.activeTab.canvas = new GrimoireCanvas();
             }
@@ -34,33 +69,16 @@ tab = function(s, y) {
                 ge.activePattern = patterns[5];
             }
             resetBrushPositions();
+            if (!ge.paintingOther) {
+                ge.activeCanvas = ge.t.canvas;
+            }
+            if (y == 0 || y) {
+                ge.t.scroll.y = y;
+                ge.t.carets = [];
+                ge.t.carets.push({x: ge.t.data[y].length, y: y, dir: 0, curXRef: 0, sel: null});
+            }
+            return ge.t;
         }
-    }
-    // for (let i = 0; i < ge.files.js.length; i++) {
-    //     // logJavaScriptConsole(griFiles.js[i]);
-    //     if (ge.files.js[i].name == s) {
-    //         ge.activeTab = ge.files.js[i];
-    //         if (ge.activeTab.canvas == null) {
-    //             ge.activeTab.canvas = new GrimoireCanvas();
-    //         }
-    //         if (ge.activeBrush == null) {
-    //             ge.activeBrush = types[typeIndex][brushIndex];
-    //         }
-    //         if (ge.activePattern == null) {
-    //             ge.activePattern = patterns[5];
-    //         }
-    //         resetBrushPositions();
-    //     }
-    // }
-    if (match) {
-        ge.t = ge.activeTab;
-        if (y == 0 || y) {
-            ge.t.scroll.y = y;
-        }
-        if (!ge.paintingOther) {
-            ge.activeCanvas = ge.t.canvas;
-        }
-        return ge.activeTab;
     } else {
         return null;
     }
@@ -640,14 +658,38 @@ GrimoireTab.prototype.deleteLine = function() {
 
 // };
 
+splitGo = function(s) {
+    let goTest = /(^go\s|^l\s)([\s\S]*)/;
+    let test = goTest.exec(s);
+    if (goTest) {
+        let params = s.split(' ');
+        let i = parseInt(params[2]);
+        if (params.length == 3 && (i == 0 || i)) {
+            go_to(params[1], i);
+        }   else if (params.length == 2) {
+            go_to(params[1]);
+        }
+        return true;
+    } else {
+        return false;
+    }
+};
+
+grimoireSpell = function(s) {
+    return splitGo(s);
+}
+
 
 GrimoireTab.prototype.evaluateLine = function() {
     let t = this;
     let line = t.data[t.carets[0].y];
-    if (t.lang == "scd") {
-        socket.emit('interpretSuperCollider', line, t.canvasPath);
-    } else if (t.lang == "js") {
-        eval(line);
+    let spell = grimoireSpell(line);
+    if (spell == false) {
+        if (t.lang == "scd") {
+            socket.emit('interpretSuperCollider', line, t.canvasPath);
+        } else if (t.lang == "js") {
+            eval(line);
+        }
     }
     let firstX = Infinity;
     t.data[t.carets[0].y].replace(/^\s*/,function(a){firstX = Math.min(firstX, a.length)});
