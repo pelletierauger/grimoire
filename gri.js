@@ -51,6 +51,9 @@ tab = function(s, y) {
     if (match === 0 || match) {
         if (request == current) {
             if (y == 0 || y) {
+                while (ge.t.data.length < Math.abs(y) + 1) {
+                    ge.t.data.push("");
+                }
                 ge.t.scroll.y = y;
                 ge.t.carets = [];
                 ge.t.carets.push({x: ge.t.data[y].length, y: y, dir: 0, curXRef: 0, sel: null});
@@ -73,6 +76,9 @@ tab = function(s, y) {
                 ge.activeCanvas = ge.t.canvas;
             }
             if (y == 0 || y) {
+                while (ge.t.data.length < Math.abs(y) + 1) {
+                    ge.t.data.push("");
+                }
                 ge.t.scroll.y = y;
                 ge.t.carets = [];
                 ge.t.carets.push({x: ge.t.data[y].length, y: y, dir: 0, curXRef: 0, sel: null});
@@ -661,7 +667,7 @@ GrimoireTab.prototype.deleteLine = function() {
 splitGo = function(s) {
     let goTest = /(^go\s|^l\s)([\s\S]*)/;
     let test = goTest.exec(s);
-    if (goTest) {
+    if (test) {
         let params = s.split(' ');
         let i = parseInt(params[2]);
         if (params.length == 3 && (i == 0 || i)) {
