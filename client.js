@@ -275,10 +275,13 @@ function init() {
         tabsLoaded = true;
         if (batchExport) {
             gr();
-            ge.loadSession("mysterious");
+            // ge.loadSession("mysterious");
             keysActive = true;
-            ge.p();
+            // ge.p();
+            tb("tabs.js");
+            ge.t.scroll.y = 827;
             redraw();
+            nt = 2725
         }
     });
     socket.emit('pullFiles', "");
