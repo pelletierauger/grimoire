@@ -278,8 +278,14 @@ function init() {
             // ge.loadSession("mysterious");
             keysActive = true;
             // ge.p();
-            tb("tabs.js");
-            ge.t.scroll.y = 827;
+            // tb("tabs.js");
+            // ge.t.scroll.y = 827;
+            // tb("sh3.js").clear();
+            tb("dots.js").clear();
+            ge.t.scroll.y = 0;
+            ge.t.carets[0].x = -1;
+            mouse.x = 1279;
+            mouse.y = 799;
             redraw();
             nt = 2725
         }
