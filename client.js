@@ -281,8 +281,8 @@ function init() {
             // tb("tabs.js");
             // ge.t.scroll.y = 827;
             // tb("sh3.js").clear();
-            tb("dots.js").clear();
-            ge.t.scroll.y = 0;
+            tb("sh3").clear();
+            ge.t.scroll.y = 1195;
             ge.t.carets[0].x = -1;
             mouse.x = 1279;
             mouse.y = 799;
