@@ -1,3 +1,5 @@
+amountOfVertices = 147456;
+
 drawDots = function() {
     vertices = [];
     let xOffset = (noise(frameCount * 0.0025) - 0.5) * 0.9;
@@ -1810,9 +1812,8 @@ drawAlligatorQuietVert = function(selectedProgram) {
     // Clear the color buffer bit
     // gl.clear(gl.COLOR_BUFFER_BIT);
     // Draw the triangle
-    gl.drawArrays(gl.POINTS, 0, 147456 * 1);
+    gl.drawArrays(gl.POINTS, 0, amountOfVertices);
 }
-
 
 drawScratches = function() {
     mS = 1;
