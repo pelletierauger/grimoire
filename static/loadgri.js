@@ -6,59 +6,12 @@ client.open('GET', 'static/paintings/sh.js.txt');
 client.onreadystatechange = function() {
   // alert(client.responseText);
   canvasD = client.responseText;
-
   let dss = `
     // gl = cnvs.drawingContext;
-
     pixelDensity(1);
     noCanvas();
     // cnvs = createCanvas(windowWidth, windowWidth * 9 / 16, WEBGL);
-    // cnvs = createCanvas(1280, 1280 * 9 / 16, WEBGL);
-    cnvs = document.createElement('canvas');
-
-    cnvs.id = "defaultCanvas0";
-    cnvs.width = 2560 * resolutionScalar;
-    cnvs.height = 1440 * resolutionScalar;
-    cnvs.style.cursor= "none";
-    var body = document.getElementsByTagName("body")[0];
-    body.appendChild(cnvs);
-    canvasDOM = document.getElementById('defaultCanvas0');
-        // gl = cnvs.drawingContext;
-
-    pixelDensity(1);
-    noCanvas();
-    // cnvs = createCanvas(windowWidth, windowWidth * 9 / 16, WEBGL);
-    // cnvs = createCanvas(1280, 1280 * 9 / 16, WEBGL);
-    cnvs = document.createElement('canvas');
-
-    cnvs.id = "defaultCanvas0";
-    cnvs.width = 2560 * resolutionScalar;
-    cnvs.height = 1440 * resolutionScalar;
-    cnvs.style.cursor= "none";
-    var body = document.getElementsByTagName("body")[0];
-    body.appendChild(cnvs);
-    canvasDOM = document.getElementById('defaultCanvas0');
-
-    // gl = cnvs.drawingContext;
-
-    pixelDensity(1);
-    noCanvas();
-    // cnvs = createCanvas(windowWidth, windowWidth * 9 / 16, WEBGL);
-    // cnvs = createCanvas(1280, 1280 * 9 / 16, WEBGL);
-    cnvs = document.createElement('canvas');
-
-    cnvs.id = "defaultCanvas0";
-    cnvs.width = 2560 * resolutionScalar;
-    cnvs.height = 1440 * resolutionScalar;
-    cnvs.style.cursor= "none";
-    var body = document.getElementsByTagName("body")[0];
-    body.appendChild(cnvs);
-    canvasDOM = document.getElementById('defaultCanvas0');
-
-
-
 `;
-
 // new GrimoireTab({
 //     name: "sh.js",
 //     lang: "js",
@@ -81,7 +34,7 @@ let tabsToLoad = ["intro.js", "sketch.js"];
 
 for (let i = 0; i < tabsToLoad.length; i++) {
     let name = tabsToLoad[i];
-    fetch("/static/" + name)
+    fetch("static/" + name)
     .then(response => response.text())
     .then((data) => {
         // console.log(data)
