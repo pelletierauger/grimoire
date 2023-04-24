@@ -261,6 +261,9 @@ function setup() {
         noLoop();
         looping = false;
     }
+
+
+
     // socket.on('getNextImage', function(data) {
     //     if (drawCount <= batchMax) {
     //         // redraw();

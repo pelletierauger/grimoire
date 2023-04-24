@@ -22,11 +22,7 @@ client.onreadystatechange = function() {
 //     canvasPath: "dummyPath"
 // });
 
-tb("intro");
-tl();
-ge.activeTab.carets[0].x = 79;
-ge.activeTab.carets[0].y = 24;
-grimoire = true;
+
 }
 client.send();
 
@@ -47,6 +43,15 @@ for (let i = 0; i < tabsToLoad.length; i++) {
             canvasData: null,
             canvasPath: "dummyPath"
         });
+    })
+    .then((data) => {
+        if (name == "intro.js") {
+            tb("intro");
+            ge.activeTab.carets[0].x = 79;
+            ge.activeTab.carets[0].y = 24;
+            tl();
+            grimoire = true;
+        }
     });
 }
 
