@@ -22,7 +22,7 @@
 ░░░          ░░░░        ║                                                      ║  ░░░░░        ░         ░░░
 ░░░░         ░░░         ╚══════════════════════════════════════════════════════╝  ░░░░░        ░░        ░░░░
 ░░░░        ░░░░                                                                    ░░░░░        ░░       ░░░░
-░░░░░       ░░░            Press the down arrow or scroll down for instruction.     ░░░░░░        ░░     ░░░░    
+░░░░░       ░░░            Press the down arrow or scroll down for instructions.    ░░░░░░        ░░     ░░░░    
 
 
 
