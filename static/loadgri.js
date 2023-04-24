@@ -26,7 +26,7 @@ client.onreadystatechange = function() {
 }
 client.send();
 
-let tabsToLoad = ["intro.js", "sketch.js"];
+let tabsToLoad = ["intro.js", "sketch.js", "shaders.js", "spi.js"];
 
 for (let i = 0; i < tabsToLoad.length; i++) {
     let name = tabsToLoad[i];
