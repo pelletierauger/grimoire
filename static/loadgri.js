@@ -50,7 +50,7 @@ for (let i = 0; i < tabsToLoad.length; i++) {
     .then((data) => {
         if (name == "intro.js") {
             tb("intro");
-            ge.activeTab.carets[0].x = 79;
+            ge.activeTab.carets[0].x = 80;
             ge.activeTab.carets[0].y = 24;
             tl();
             grimoire = true;
