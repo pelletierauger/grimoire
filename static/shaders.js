@@ -1,5 +1,21 @@
+You are now in the shaders.js tab.
 
+Below are big blocks of code, each of which define a different background animation.
+You can evaluate a block of code using CMD and ENTER on Mac, and CRTL and ENTER on PC.
+
+What you will do by evaluating any blocks below is modifying the value
+of newFlickeringVert, a WebGL shader program that is currently set to be displayed
+in the background.
+
+It is recommended that you set the amountOfVertices of 450000 to view most of these
+animations.
+
+amountOfVertices = 450000;
+
+// —————————————————————————————————————————————————————————————
 // radiator
+// —————————————————————————————————————————————————————————————
+
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
@@ -160,8 +176,10 @@ newFlickeringVert.vertText = newFlickeringVert.vertText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g, "");
 newFlickeringVert.init();
 
-
+// —————————————————————————————————————————————————————————————
 // radsigil
+// —————————————————————————————————————————————————————————————
+
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
@@ -323,7 +341,10 @@ newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.init();
 
 
+// —————————————————————————————————————————————————————————————
 // radsigil2
+// —————————————————————————————————————————————————————————————
+
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
@@ -485,8 +506,10 @@ newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.init();
 
 
+// —————————————————————————————————————————————————————————————
+// radsigil3
+// —————————————————————————————————————————————————————————————
 
-// radsigil2
 alterVision = function(av0 = "1e-3", av1 = "1e-4", av2 = "1.") {
 newFlickeringVert.vertText = `
     // beginGLSL
@@ -650,7 +673,11 @@ newFlickeringVert.init();
 };
 alterVision();
 
+
+// —————————————————————————————————————————————————————————————
 // radflow
+// —————————————————————————————————————————————————————————————
+
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
@@ -813,7 +840,10 @@ newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.init();
 
 
-// zenterrain
+// —————————————————————————————————————————————————————————————
+// zen terrain
+// —————————————————————————————————————————————————————————————
+
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
@@ -989,6 +1019,11 @@ newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.init();
 
 
+
+// —————————————————————————————————————————————————————————————
+// other terrain
+// —————————————————————————————————————————————————————————————
+
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
@@ -1134,6 +1169,9 @@ newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.init();
 
 
+// —————————————————————————————————————————————————————————————
+// yet another terrain
+// —————————————————————————————————————————————————————————————
 
 
 newFlickeringVert.vertText = `
@@ -1333,6 +1371,9 @@ newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.init();
 
 
+// —————————————————————————————————————————————————————————————
+// where are we
+// —————————————————————————————————————————————————————————————
 
 newFlickeringVert.vertText = `
     // beginGLSL
@@ -1531,7 +1572,9 @@ newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.init();
 
 
-
+// —————————————————————————————————————————————————————————————
+// we don't know
+// —————————————————————————————————————————————————————————————
 
 newFlickeringVert.vertText = `
     // beginGLSL
@@ -1731,6 +1774,9 @@ newFlickeringVert.vertText = newFlickeringVert.vertText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g, "");
 newFlickeringVert.init();
 
+// —————————————————————————————————————————————————————————————
+// nor will we ever, probably
+// —————————————————————————————————————————————————————————————
 
 newFlickeringVert.vertText = `
     // beginGLSL
@@ -1931,7 +1977,9 @@ newFlickeringVert.vertText = newFlickeringVert.vertText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g, "");
 newFlickeringVert.init();
 
-
+// —————————————————————————————————————————————————————————————
+// it'll remain uncertain
+// —————————————————————————————————————————————————————————————
 
 newFlickeringVert.vertText = `
     // beginGLSL
@@ -2132,6 +2180,9 @@ newFlickeringVert.vertText = newFlickeringVert.vertText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g, "");
 newFlickeringVert.init();
 
+// —————————————————————————————————————————————————————————————
+// forever uncertain
+// —————————————————————————————————————————————————————————————
 
 newFlickeringVert.vertText = `
     // beginGLSL
@@ -2342,6 +2393,9 @@ newFlickeringVert.fragText = newFlickeringVert.fragText.replace(/[^\x00-\x7F]/g,
 newFlickeringVert.init();
 
 
+// —————————————————————————————————————————————————————————————
+// void
+// —————————————————————————————————————————————————————————————
 
 newFlickeringVert.vertText = `
     // beginGLSL
