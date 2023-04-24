@@ -7,7 +7,7 @@ What you will do by evaluating any blocks below is modifying the value
 of newFlickeringVert, a WebGL shader program that is currently set to be displayed
 in the background.
 
-It is recommended that you set the amountOfVertices of 450000 to view most of these
+It is recommended that you set the amountOfVertices to 450000 to view most of these
 animations.
 
 amountOfVertices = 450000;
