@@ -7094,7 +7094,7 @@ newFlickering.fragText = `
         // gl_FragColor = vec4(1.0, (1.0 - dist_squared * 40.) * 0.6, 0.0, alpha + ((0.12 - dist_squared) * 4.) - (rando * 0.2));
         gl_FragColor = vec4(1.0, 0.2 - dist_squared, 0.0 + alpha * 120., ((3. - dist_squared * 24.0 * (0.25 + alph) - (rando * 4.1)) * 0.045 + alpha)) * 1.25;
         // gl_FragColor = vec4(1.0);
-        // gl_FragColor.b = 0.5;
+        gl_FragColor.rgb *= 0.25;
     }
     // endGLSL
 `;
