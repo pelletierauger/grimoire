@@ -59,27 +59,45 @@ client.onreadystatechange = function() {
 
 `;
 
-new GrimoireTab({
-                    name: "sh.js",
-                    lang: "js",
-                    scroll: {x: 0, y: 0},
-                    carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],
-                    data: dss.split("\n"),
-                    canvasData: canvasD,
-                    canvasPath: "dummyPath"
-                });
+// new GrimoireTab({
+//     name: "sh.js",
+//     lang: "js",
+//     scroll: {x: 0, y: 0},
+//     carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],
+//     data: dss.split("\n"),
+//     canvasData: canvasD,
+//     canvasPath: "dummyPath"
+// });
 
-tb("sh.js");
+tb("intro");
 tl();
+ge.activeTab.carets[0].x = 79;
+ge.activeTab.carets[0].y = 24;
 grimoire = true;
 }
 client.send();
 
-fetch('/static/sketch.js')
-  .then(response => response.text())
-  .then((data) => {
-    console.log(data)
-  });
+let tabsToLoad = ["intro.js", "sketch.js"];
+
+for (let i = 0; i < tabsToLoad.length; i++) {
+    let name = tabsToLoad[i];
+    fetch("/static/" + name)
+    .then(response => response.text())
+    .then((data) => {
+        // console.log(data)
+        new GrimoireTab({
+            name: name,
+            lang: "js",
+            scroll: {x: 0, y: 0},
+            carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],
+            data: data.split("\n"),
+            canvasData: null,
+            canvasPath: "dummyPath"
+        });
+    });
+}
+
+
 
 
   GrimoireTab.prototype.display = function() {
