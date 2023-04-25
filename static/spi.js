@@ -1081,7 +1081,7 @@ drawAlligatorQuiet = function(selectedProgram) {
                         value: random([0, 2, 4, 7, 11])
                     }]
                     };
-                    socket.emit('msgToSCD', msgToSend);
+                    //socket.emit('msgToSCD', msgToSend);
                 }
             }
         }
@@ -1337,7 +1337,7 @@ drawAlligatorQuiet = function(selectedProgram) {
                         value: random([0, 2, 4, 7, 11])
                     }]
                     };
-                    socket.emit('msgToSCD', msgToSend);
+                    //socket.emit('msgToSCD', msgToSend);
                 }
             }
         }
@@ -1656,7 +1656,7 @@ drawAlligatorQuiet = function(selectedProgram) {
                         value: moonVox[m[2]]
                     }]
                     };
-                    socket.emit('msgToSCD', msgToSend);
+                    //socket.emit('msgToSCD', msgToSend);
                 }
             }
         }
