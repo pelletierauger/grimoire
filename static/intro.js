@@ -30,20 +30,20 @@
         
         You can toggle between modes by pressing the ESC key.
 
-       ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
-       │ █▓▒░ Editing Mode ░▒▓█                                                                        │░
-       │                                                                                               │░ 
-       │ Edit text files and live code.                                                                │░
-       │                                                                                               │░
-       │ █▓▒░ Painting Mode ░▒▓█                                                                       │░
-       │                                                                                               │░
-       │ Paint on top of the text with tools inspired by MacPaint.                                     │░
-       │                                                                                               │░ 
-       │ █▓▒░ Console Mode ░▒▓█                                                                        │░ 
-       │                                                                                               │░ 
-       │ Input some commands and do some live coding without editing text files.                       │░
-       └───────────────────────────────────────────────────────────────────────────────────────────────┘░
-        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+       ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+       │ █▓▒░ Editing Mode ░▒▓█                                                                       │░
+       │                                                                                              │░ 
+       │ Edit text files and live code.                                                               │░
+       │                                                                                              │░
+       │ █▓▒░ Painting Mode ░▒▓█                                                                      │░
+       │                                                                                              │░
+       │ Paint on top of the text with tools inspired by MacPaint.                                    │░
+       │                                                                                              │░ 
+       │ █▓▒░ Console Mode ░▒▓█                                                                       │░ 
+       │                                                                                              │░ 
+       │ Input some commands and do some live coding without editing text files.                      │░
+       └──────────────────────────────────────────────────────────────────────────────────────────────┘░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
         To live code, you can press SHIFT and ENTER
         and it will evaluate the line where the caret is currently located.
