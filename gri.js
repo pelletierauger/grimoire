@@ -1110,7 +1110,7 @@ GrimoireEditor.prototype.update = function(e) {
         } else if (s == "Enter" && e.shiftKey) {
             t.evaluateLine();
             updated = false;
-        } else if (s == "Enter" && e.metaKey) {
+        } else if (s == "Enter" && (e.metaKey || e.ctrlKey)) {
             t.evaluateBlock();
             updated = false;
         } else if (s == "." && e.metaKey) {
