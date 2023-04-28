@@ -749,7 +749,9 @@ GrimoireTab.prototype.evaluateBlock = function() {
             block = block + "\n" + t.data[i];
         }
         // console.log(block);
-        eval(block);
+        setTimeout(function(b){
+            eval(b);
+        }, 1, block);
         ge.evaluated = 5;
         let firstX = Infinity;
         for (let i = startline; i < endline; i++) {
