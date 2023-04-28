@@ -19,6 +19,7 @@ amountOfVertices = 450000;
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying float alsca;
@@ -33,7 +34,7 @@ newFlickeringVert.vertText = `
         float ratio = 16.0 / 9.0;
         float vertexCount = 147456.0;
         float id = vertexID;
-       // float dist_squared = dot(vec2(x, y), vec2(0., 0.));
+        // float dist_squared = dot(vec2(x, y), vec2(0., 0.));
         // x += (dist_squared) * 200.;
         // float px = x;
         // float py = y;
@@ -88,7 +89,7 @@ newFlickeringVert.vertText = `
         );
         // m = m * 4.0;
         // rm = sm * rm;
-                // m = tm * m;
+        // m = tm * m;
         // vec2 pos = cx_mul(vec2(x, y), vec2(0.5, 0.5));
         // pos = cx_mul(pos, vec2(0.75, 0.75));
         float x0 = ((fract(id / 512.)) - 0.5);
@@ -107,16 +108,18 @@ newFlickeringVert.vertText = `
         // pos.xyz = rotate(pos.xyz, vec3(0.0, 0.0, 0.0), t);
         pos = zr * pos;
         // pos = tm4 * pos;
-                pos = xr * pos;
+        pos = xr * pos;
         pos = tm4 * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 3., pos.y * 3., 0.0, pos.z * 1.);
         gl_PointSize = 25. - (60. * pos.z * 0.01);
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
-       float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.91) * 0.43, 0.05, 0.5) + 0.0);
+        float vig = (roundedRectangle(
+        pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.77, 0.94) * 0.47, 0.03, 0.05) + 0.0);
         cols = mix(cols, cols * floor(vig), 1.);
-        gl_PointSize *= floor(vig) * 1.2;
+        // gl_PointSize *= floor(vig) * 1.2;
+        gl_PointSize *= floor(vig) * 1.2 * 2. * resolution;
         alsca = 1.0;
         if ((sin((vertexID * 1e-5)) + 1.0) * 0.5 < (cos(time * 0.5e-2) + 1.) * 0.5) {
             // cols = vec3(0.0);
@@ -124,9 +127,9 @@ newFlickeringVert.vertText = `
             alsca = 0.0;
         }
         // gl_PointSize = max(9.0, gl_PointSize) * gl_PointSize * 0.1;
-    if (gl_PointSize < 6.0) {
-        alsca = 0.0;
-    }
+        if (gl_PointSize < 6.0) {
+            alsca = 0.0;
+        }
     }
     // endGLSL
 `;
@@ -183,6 +186,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying float alsca;
@@ -280,7 +284,8 @@ newFlickeringVert.vertText = `
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 0.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.91) * 0.43, 0.05, 0.5) + 0.0);
         cols = mix(cols, cols * floor(vig), 1.);
-        gl_PointSize *= floor(vig) * 1.2;
+        // gl_PointSize *= floor(vig) * 1.2;
+        gl_PointSize *= floor(vig) * 1.2 * 2. * resolution;
         alsca = 1.0;
         if ((sin((vertexID * 1e-5)) + 1.0) * 0.5 < (cos(time * 0.5e-2) + 1.) * 0.5) {
             // cols = vec3(0.0);
@@ -348,6 +353,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying float alsca;
@@ -445,7 +451,8 @@ newFlickeringVert.vertText = `
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 0.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.91) * 0.43, 0.05, 0.5) + 0.0);
         cols = mix(cols, cols * floor(vig), 1.);
-        gl_PointSize *= floor(vig) * 1.2;
+        // gl_PointSize *= floor(vig) * 1.2;
+        gl_PointSize *= floor(vig) * 1.2 * 2. * resolution;
         alsca = 1.0;
         if ((sin((vertexID * 1e-5)) + 1.0) * 0.5 < (cos(time * 0.5e-2) + 1.) * 0.5) {
             // cols = vec3(0.0);
@@ -514,6 +521,7 @@ alterVision = function(av0 = "1e-3", av1 = "1e-4", av2 = "1.") {
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying float alsca;
@@ -611,7 +619,8 @@ newFlickeringVert.vertText = `
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 0.5 / pos.z * ${av2}, vec2(0.0, 0.0), vec2(1.82, 0.91) * 0.43, 0.05, 0.5) + 0.0);
         cols = mix(cols, cols * floor(vig), 1.);
-        gl_PointSize *= floor(vig) * 1.2;
+        // gl_PointSize *= floor(vig) * 1.2;
+        gl_PointSize *= floor(vig) * 1.2 * 2. * resolution;
         alsca = 1.0;
         if ((sin((vertexID * 1e-5)) + 1.0) * 0.5 < (cos(time * 0.5e-2) + 1.) * 0.5) {
             // cols = vec3(0.0);
@@ -681,6 +690,7 @@ alterVision();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying float alsca;
@@ -779,7 +789,8 @@ newFlickeringVert.vertText = `
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 0.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.91) * 0.43, 0.05, 0.5) + 0.0);
         cols = mix(cols, cols * floor(vig), 1.);
-        gl_PointSize *= floor(vig) * 1.2;
+        // gl_PointSize *= floor(vig) * 1.2;
+        gl_PointSize *= floor(vig) * 1.2 * 2. * resolution;
         alsca = 1.0;
         if ((sin((vertexID * 1e-5)) + 1.0) * 0.5 < (cos(time * 0.5e-2) + 1.) * 0.5) {
             // cols = vec3(0.0);
@@ -847,6 +858,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -965,7 +977,8 @@ newFlickeringVert.vertText = `
         pos = tm4 * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 20., pos.y * 20., 0.0, pos.z * 1.);
-        gl_PointSize = 20. - (60. * pos.z * 0.01);
+        // gl_PointSize = 20. - (60. * pos.z * 0.01);
+        gl_PointSize = (20. - (60. * pos.z * 0.01)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.91) * 0.065, 0.0025, 0.125) + 0.0);
@@ -1027,6 +1040,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -1115,7 +1129,8 @@ z += tan(id * 1e-4) * id / vertexCount;
         pos = tm4 * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 1., pos.y * 1., 0.0, pos.z * 1.);
-        gl_PointSize = 25. - (60. * pos.z * 0.01);
+        // gl_PointSize = 25. - (60. * pos.z * 0.01);
+        gl_PointSize = (25. - (60. * pos.z * 0.01)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.68, 0.91) * 1.5, 0.05, 0.5) + 0.0);
@@ -1177,6 +1192,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -1214,7 +1230,7 @@ newFlickeringVert.vertText = `
         float ratio = 16.0 / 9.0;
         float vertexCount = 147456.0;
         float id = vertexID;
-       // float dist_squared = dot(vec2(x, y), vec2(0., 0.));
+        // float dist_squared = dot(vec2(x, y), vec2(0., 0.));
         // x += (dist_squared) * 200.;
         // float px = x;
         // float py = y;
@@ -1277,12 +1293,12 @@ newFlickeringVert.vertText = `
         );
         // m = m * 4.0;
         // rm = sm * rm;
-                // m = tm * m;
+        // m = tm * m;
         // vec2 pos = cx_mul(vec2(x, y), vec2(0.5, 0.5));
         // pos = cx_mul(pos, vec2(0.75, 0.75));
         float x = ((fract(id / (512. * 2.))) - 0.5) * 6.;
         float y = ((floor(id / (512. * 2.)) / (512. * 2.)) - 0.5 / ratio) * 6.;
-                vec2 pos2 = vec2(x, y);
+        vec2 pos2 = vec2(x, y);
         float turb = 0.0;
         for (float i = 0.0; i < 25.0; i++) {
             float fi = i * 2e-2;
@@ -1294,8 +1310,6 @@ newFlickeringVert.vertText = `
             pos2.y += yd * cos(yd * 2e1) * 1.6;
             turb += xd + yd;
         }
-        
-        
         // float x = cos(id * 1e1) * id * 5e-5;
         // float y = sin(id * 1e1) * id * 5e-5;
         // x = mix(x, x0, 0.8);
@@ -1305,22 +1319,23 @@ newFlickeringVert.vertText = `
         // z = mix(z, 0.0, 0.85);
         z = 0.0;
         z = z + fbm((vec2(x, y) + 10.0) * 1.) * 0.75;
-                // z += id / vertexCount * 400. * sin(x * id * 1e2 + tan(id * 1e8) * 1e-1) * 0.5;
-                // z += tan(id * 1e-4) * id / vertexCount * 0.1;
+        // z += id / vertexCount * 400. * sin(x * id * 1e2 + tan(id * 1e8) * 1e-1) * 0.5;
+        // z += tan(id * 1e-4) * id / vertexCount * 0.1;
         float d = distance(vec2(pos2.x, pos2.y), vec2(0.0, 0.0));
         vec4 pos = vec4(pos2.y, z, pos2.x, 1.0);
         // pos = pm * pos;
         // pos.xyz = rotate(pos.xyz, vec3(0.0, 0.0, 0.0), t);
         pos = zr2 * pos;
         // pos = tm4 * pos;
-                pos = yr * pos;
+        pos = yr * pos;
         pos = tm4 * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 50., pos.y * 50., 0.0, pos.z * 1.);
-        gl_PointSize = 34. - (60. * pos.z * 0.02);
+        // gl_PointSize = 34. - (60. * pos.z * 0.02);        
+        gl_PointSize = (34. - (60. * pos.z * 0.02)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
-       float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.85, 0.94) * 0.026, 0.001, 0.05) + 0.0);
+        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.85, 0.94) * 0.026, 0.001, 0.05) + 0.0);
         cols = mix(cols, cols * floor(vig), 1.);
         gl_PointSize *= floor(vig);
     }
@@ -1378,6 +1393,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -1518,7 +1534,8 @@ newFlickeringVert.vertText = `
         pos = tm4 * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 50., pos.y * 50., 0.0, pos.z * 1.);
-        gl_PointSize = 34. - (60. * pos.z * 0.02);
+        // gl_PointSize = 34. - (60. * pos.z * 0.02);   
+        gl_PointSize = (34. - (60. * pos.z * 0.02)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.85, 0.94) * 0.026, 0.001, 0.05) + 0.0);
@@ -1579,6 +1596,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -1721,11 +1739,14 @@ newFlickeringVert.vertText = `
         pos = tm4 * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 40., pos.y * 40., 0.0, pos.z * 1.);
-        gl_PointSize = 34. - (60. * pos.z * 0.02);
+        // gl_PointSize = 34. - (60. * pos.z * 0.02);        
+        gl_PointSize = (34. - (60. * pos.z * 0.02)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
-       float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.92) * 0.026 * 1.29, 0.001, 0.05) + 0.0);
-        cols = mix(cols, cols * floor(vig), 1.);
+       // float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.92) * 0.026 * 1.29, 0.001, 0.05) + 0.0);
+               float vig = (roundedRectangle(
+       pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(0.865, 0.46) * 0.026 * 2.8, 0.001, 0.02) + 0.0);
+       cols = mix(cols, cols * floor(vig), 1.);
         gl_PointSize *= floor(vig);
     }
     // endGLSL
@@ -1781,6 +1802,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -1924,7 +1946,8 @@ newFlickeringVert.vertText = `
         pos = tm4 * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 20., pos.y * 20., 0.0, pos.z * 1.);
-        gl_PointSize = 29.5 - (60. * pos.z * 0.02);
+        // gl_PointSize = 29.5 - (60. * pos.z * 0.02);    
+        gl_PointSize = (29.5 - (60. * pos.z * 0.02)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.96) * 0.026 * 2.69, 0.001, 0.05) + 0.0);
@@ -1984,6 +2007,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -2127,7 +2151,8 @@ newFlickeringVert.vertText = `
         pos = tm4 * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 20., pos.y * 20., 0.0, pos.z * 1.);
-        gl_PointSize = 29.5 - (60. * pos.z * 0.02);
+        // gl_PointSize = 29.5 - (60. * pos.z * 0.02);
+        gl_PointSize = (29.5 - (60. * pos.z * 0.02)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.96) * 0.026 * 2.69, 0.001, 0.05) + 0.0);
@@ -2187,6 +2212,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -2339,7 +2365,8 @@ newFlickeringVert.vertText = `
         // pos = yyr * pos;
         // pos = m * pos;
         gl_Position = vec4(pos.x / ratio * 15., pos.y * 15., 0.0, pos.z * 1.);
-        gl_PointSize = 29.5 - (60. * pos.z * 0.02);
+        // gl_PointSize = 29.5 - (60. * pos.z * 0.02);
+        gl_PointSize = (29.5 - (60. * pos.z * 0.02)) * 2.0 * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.98) * 0.026 * 3.59, 0.001, 0.05) + 0.0);
@@ -2400,6 +2427,7 @@ newFlickeringVert.init();
 newFlickeringVert.vertText = `
     // beginGLSL
     attribute float vertexID;
+    uniform float resolution;
     uniform float time;
     varying float alph;
     varying vec3 cols;
@@ -2566,7 +2594,8 @@ newFlickeringVert.vertText = `
         // distr2 *= 0.;
         //gl_Position.y += disturbance * 0.1 * sin(time) * (1. + distr2 * 5.);
         gl_PointSize = (29.5 - (60. * pos.z * 0.02)) * sca;
-        gl_PointSize = 6. * sca;
+        // gl_PointSize = 6. * sca;
+        gl_PointSize = 6. * sca * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.98) * 0.026 * 3.59, 0.001, 0.05) + 0.0);
