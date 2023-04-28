@@ -981,7 +981,8 @@ newFlickeringVert.vertText = `
         gl_PointSize = (20. - (60. * pos.z * 0.01)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
-       float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.82, 0.91) * 0.065, 0.0025, 0.125) + 0.0);
+       float vig = (roundedRectangle(
+       pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.93, 1.033) * 0.065, 0.0025, 0.035) + 0.0);
         cols = mix(cols, cols * floor(vig), 1.);
         gl_PointSize *= floor(vig);
     }
@@ -1335,7 +1336,8 @@ newFlickeringVert.vertText = `
         gl_PointSize = (34. - (60. * pos.z * 0.02)) * 2. * resolution;
         alph = 0.25 * 0.75;
         cols = vec3(0.65 + 0.5 / pos.z);
-        float vig = (roundedRectangle(pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.85, 0.94) * 0.026, 0.001, 0.05) + 0.0);
+        float vig = (roundedRectangle(
+        pos.xy * 1.5 / pos.z, vec2(0.0, 0.0), vec2(1.93, 1.035) * 0.026, 0.001, 0.015) + 0.0);
         cols = mix(cols, cols * floor(vig), 1.);
         gl_PointSize *= floor(vig);
     }
