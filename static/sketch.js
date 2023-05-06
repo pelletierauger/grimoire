@@ -634,6 +634,7 @@ keyDown = function(e) {
             paintingKeys(e);
         }
     }
+    e.preventDefault();
 }
 
 document.onkeydown = keyDown;       
