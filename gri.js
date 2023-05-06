@@ -1022,6 +1022,7 @@ GrimoireEditor.prototype.saveTab = function() {
 GrimoireEditor.prototype.update = function(e) {
     let s = e.key;
     let t = this.activeTab;
+    let modifier = (isMac) ? e.metaKey : e.ctrlKey;
     if (t !== null) {
         let updated = true;
         let updateDate = new Date();
@@ -1043,11 +1044,11 @@ GrimoireEditor.prototype.update = function(e) {
             t.scroll.y++;
             t.moveCaretsY(1);
             updateHistory = false;
-        } else if (s == "ArrowDown" && e.metaKey) {
-            for (let i = 0; i < 23; i++) {t.moveCaretsY(1);}
+        } else if (s == "ArrowDown" && modifier) {
+            for (let i = 0; i < 25; i++) {t.moveCaretsY(1);}
             updateHistory = false;
-        } else if (s == "ArrowUp" && e.metaKey) {
-            for (let i = 0; i < 23; i++) {t.moveCaretsY(-1);}
+        } else if (s == "ArrowUp" && modifier) {
+            for (let i = 0; i < 25; i++) {t.moveCaretsY(-1);}
             updateHistory = false;
         } else if (s == "ArrowUp" && e.altKey && t.scroll.y > 0) {
             t.scroll.y--;
@@ -1082,12 +1083,12 @@ GrimoireEditor.prototype.update = function(e) {
             t.moveCaretsY(1);
             updateHistory = false;
         } else if (s == "PageUp") {
-            for (let i = 0; i < 23; i++) {t.moveCaretsY(-1);}
+            for (let i = 0; i < 25; i++) {t.moveCaretsY(-1);}
             updateHistory = false;
         } else if (s == "PageDown") {
-            for (let i = 0; i < 23; i++) {t.moveCaretsY(1);}
+            for (let i = 0; i < 25; i++) {t.moveCaretsY(1);}
             updateHistory = false;
-        } else if (s == "z" && e.metaKey && e.shiftKey) {
+        } else if (s == "z" && modifier && e.shiftKey) {
             if (t.historyIndex < t.history.length - 1){
                 t.applyHistoryState(t.historyIndex + 1);
             } else if (t.historyIndex == t.history.length - 1) {
@@ -1095,7 +1096,7 @@ GrimoireEditor.prototype.update = function(e) {
                 t.attachedHeadState = true;
             }
             updated = false;
-        } else if (s == "z" && e.metaKey) {
+        } else if (s == "z" && modifier) {
             if (t.attachedHeadState) {
                 // t.logHistory(t.prepareHistoryState());
                 // t.historyIndex++;
@@ -1112,10 +1113,10 @@ GrimoireEditor.prototype.update = function(e) {
         } else if (s == "Enter" && e.shiftKey) {
             t.evaluateLine();
             updated = false;
-        } else if (s == "Enter" && (e.metaKey || e.ctrlKey)) {
+        } else if (s == "Enter" && modifier) {
             t.evaluateBlock();
             updated = false;
-        } else if (s == "." && e.metaKey) {
+        } else if (s == "." && modifier) {
             // if (t.lang == "scd") {
                 socket.emit('interpretSuperCollider', 'CmdPeriod.run;', t.canvasPath)
             // }
@@ -1123,7 +1124,7 @@ GrimoireEditor.prototype.update = function(e) {
         } else if (s == "Enter") {
             t.addLine();
             // updated = false;
-        } else if (s.length == 1) {
+        } else if (s.length == 1 && (modifier == false)) {
             t.update(s);
         } else if (s == "Backspace") {
             t.update("");
@@ -3734,3 +3735,5 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     return data;
 };
 // sss = ge.blurCanvas("sssss.scd", 0, 365, 109, 365 + 25, "sketch.js", 0, 0);
+
+let isMac = /Mac|iPhone|iPad/.test(window.navigator.platform);
