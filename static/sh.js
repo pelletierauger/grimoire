@@ -7042,7 +7042,7 @@ newFlickering.vertText = `
     }
     void main(void) {
         gl_Position = vec4(coordinates.x, coordinates.y, 0.0, 1.);
-        gl_Position.xy *= (1.0 - distance(gl_Position.xy, vec2(0,0)) * 0.1) * 1.05;
+        // gl_Position.xy *= (1.0 - distance(gl_Position.xy, vec2(0,0)) * 0.1) * 1.05;
         // gl_Position.xy *= 0.75;
         float n = noise(gl_Position.xy);
         // gl_Position.y += tan(n * 100. * 1e2 + alph) * 0.0009 * 2.;
