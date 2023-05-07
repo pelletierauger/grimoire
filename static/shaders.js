@@ -1,7 +1,7 @@
 You are now in the shaders.js tab.
 
 Below are big blocks of code, each of which define a different background animation.
-You can evaluate a block of code using CMD and ENTER on Mac, and CRTL and ENTER on PC.
+You can evaluate a block of code using CMD and ENTER on Mac, and CTRL and ENTER on PC.
 
 What you will do by evaluating any blocks below is modifying the value
 of newFlickeringVert, a WebGL shader program that is currently set to be displayed
