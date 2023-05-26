@@ -2998,6 +2998,8 @@ paintingKeys = function(e) {
         ge.t.scroll.y = Math.max(0, ge.t.scroll.y - 25);
     } else if (s == "PageDown") {
         ge.t.scroll.y += 25;
+    } else if (s == "f") {
+        ge.flipCanvas();
     }
     // console.log(s);
 };
@@ -3737,3 +3739,29 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
 // sss = ge.blurCanvas("sssss.scd", 0, 365, 109, 365 + 25, "sketch.js", 0, 0);
 
 let isMac = /Mac|iPhone|iPad/.test(window.navigator.platform);
+
+GrimoireEditor.prototype.flipCanvas = function() {
+    let stashed = ge.t.canvas.data.slice(ge.t.scroll.y, ge.t.scroll.y + 26);
+    for (let i = 0; i < stashed.length; i++) {
+        stashed[i] = stashed[i].reverse();
+    }
+    for (let i = 0; i < stashed.length; i++) {
+        for (let k = 0; k < stashed[i].length; k++) {
+            let c = stashed[i][k];
+            if (c.length == 63) {
+                let flippedC = [];
+                const chunkSize = 7;
+                for (let k = 0; k < c.length; k += chunkSize) {
+                    const chunk = c.slice(k, k + chunkSize).reverse();
+                    for (let l = 0; l < chunk.length; l++) {
+                        flippedC.push(chunk[l]);
+                    }
+                }
+                stashed[i][k] = flippedC;
+            }
+        }
+    }
+    for (let i = ge.t.scroll.y; i < ge.t.scroll.y + 25; i++) {
+        ge.t.canvas.data[i] = stashed[i - ge.t.scroll.y];
+    }
+};
