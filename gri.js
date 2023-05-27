@@ -3743,25 +3743,34 @@ let isMac = /Mac|iPhone|iPad/.test(window.navigator.platform);
 GrimoireEditor.prototype.flipCanvas = function() {
     let stashed = ge.t.canvas.data.slice(ge.t.scroll.y, ge.t.scroll.y + 26);
     for (let i = 0; i < stashed.length; i++) {
-        stashed[i] = stashed[i].reverse();
-    }
-    for (let i = 0; i < stashed.length; i++) {
-        for (let k = 0; k < stashed[i].length; k++) {
-            let c = stashed[i][k];
-            if (c.length == 63) {
-                let flippedC = [];
-                const chunkSize = 7;
-                for (let k = 0; k < c.length; k += chunkSize) {
-                    const chunk = c.slice(k, k + chunkSize).reverse();
-                    for (let l = 0; l < chunk.length; l++) {
-                        flippedC.push(chunk[l]);
+        if (stashed[i]) {
+            let mirrored = new Array(109);
+            for (let m = 0; m < stashed[i].length; m++) {
+                mirrored[m] = stashed[i][m];
+            }
+            stashed[i] = mirrored.reverse();
+            for (let j = 0; j < stashed[i].length; j++) {
+                let c = stashed[i][j];
+                if (c) {
+                    let originalC = new Array(63).fill(0);
+                    for (let o = 0; o < c.length; o++) {
+                        originalC[o] = c[o];
                     }
+                    let flippedC = new Array(63).fill(0);
+                    let n = 0;
+                    for (let k = 0; k < originalC.length; k += 7) {
+                        const chunk = originalC.slice(k, k + 7).reverse();
+                        for (let l = 0; l < chunk.length; l++) {
+                            flippedC[n] = chunk[l];
+                            n++;
+                        }
+                    }
+                    stashed[i][j] = flippedC;
                 }
-                stashed[i][k] = flippedC;
             }
         }
     }
-    for (let i = ge.t.scroll.y; i < ge.t.scroll.y + 25; i++) {
+    for (let i = ge.t.scroll.y; i < ge.t.scroll.y + stashed.length; i++) {
         ge.t.canvas.data[i] = stashed[i - ge.t.scroll.y];
     }
 };
