@@ -3784,7 +3784,7 @@ GrimoireEditor.prototype.flipCanvas = function() {
     for (let i = 0; i < stashed.length; i++) {
         if (stashed[i]) {
             let mirrored = new Array(109);
-            for (let m = 0; m < stashed[i].length; m++) {
+            for (let m = 0; m < Math.min(stashed[i].length, 109); m++) {
                 mirrored[m] = stashed[i][m];
             }
             stashed[i] = mirrored.reverse();
