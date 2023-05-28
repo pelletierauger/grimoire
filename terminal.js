@@ -3551,9 +3551,9 @@ quill = [];
 pebble = [];
 nib = [];
 spray = [];
-types = [quill, pebble, nib, spray];
+circular = [];
+types = [quill, circular, pebble, nib, spray];
 brushRandom = false;
-
 
 brushes = [];
 

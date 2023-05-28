@@ -1653,7 +1653,7 @@ thickerQuillBackward = new Brush({
 // }
 // a = b;
 
-
+if (false) {
 
 thinQuillForward = new Brush({
     type: quill,
@@ -1713,6 +1713,7 @@ thinQuillBackward = new Brush({
     ]
 });
 
+}
 
 // Beautiful circle
 if (false) {
@@ -1738,7 +1739,6 @@ for (let y = 0; y < w; y++) {
 }
 thinQuillBackward.anchor = [hw, hw];
 thinQuillBackward.data = a;
-
 }
 
 
@@ -2847,6 +2847,41 @@ let airBrush1 = new Brush({
     ]
 });
 
+// writeCircles = function(n = 17.8) {
+// circular = [];
+// types = [quill, pebble, nib, spray, circular];
+makeCircles = function() {
+    let cutoffs = [6, 7.5, 11.5, 12.5, 21.1, 26.91, 36.5, 46.5].reverse();
+    for (let i = 0; i < cutoffs.length; i++) {
+        let a = [];
+        let w = 100;
+        let hw = w / 2;
+        for (let y = 0; y < w; y++) {
+            a[y] = [];
+            for (let x = 0; x < w; x++) {
+                let v = dist(x, y * 1.75, hw, hw * 1.75);
+                // 46.5, 36.5, 26.9, 17.85, 18.2, 11.95, 5
+                v = (v < cutoffs[i]) ? 1 : 0;
+                a[y][x] = v;
+            }
+        }
+        // console.log(a);
+        let circularBrush = new Brush({
+            type: circular,
+            anchor: [hw, hw],
+            data: a
+        });
+    }
+    function dist(x1, y1, x2, y2) {
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    };
+};
+makeCircles();
+//     brushIndex = 0;
+//     ge.activeBrush = types[typeIndex][brushIndex];
+//     resetBrushPositions(); 
+// };
+
 resetBrushPositions = function() {
     ge.brushPositions = [];
     for (let y = 0; y < 25 * 9; y++) {
@@ -2985,6 +3020,10 @@ paintingKeys = function(e) {
         resetBrushPositions(); 
     } else if (s == "b") {
         brushIndex = (brushIndex + 1) % types[typeIndex].length;
+        ge.activeBrush = types[typeIndex][brushIndex];
+        resetBrushPositions(); 
+    } else if (s == "v") {
+        brushIndex = (brushIndex - 1 + types[typeIndex].length) % types[typeIndex].length;
         ge.activeBrush = types[typeIndex][brushIndex];
         resetBrushPositions(); 
     } else if (s == "r") {
