@@ -3500,13 +3500,15 @@ paint = function(val = 1) {
                 let rand = Math.round(Math.random() - Math.random());
                 let pattern = ge.activePattern.grid;
                 let pdim = [pattern[0].length, pattern.length];
-                let vv = pattern[Math.floor(((ge.activeTab.scroll.y * 9 ) + y) * patternScale) % pdim[1]][Math.floor(x * patternScale) % pdim[0]];
+                let vv = pattern[Math.floor(((ge.activeTab.scroll.y * 9 ) + y + patternYOffset) * patternScale) % pdim[1]][Math.floor((x + patternXOffset) * patternScale) % pdim[0]];
                 if (val == 0) {vv = 1 - vv};
                 ge.paintingFunction(Math.floor(x/7),Math.floor(y/9), x%7,y%9, vv);
             }
         }
     }
 }
+patternYOffset = 0;
+patternXOffset = 0;
 
 paintStatic = function(c, x, y, brush, pattern) {
     c = ge.getTab(c).canvas.data;
