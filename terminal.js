@@ -3472,6 +3472,26 @@ paintUnitAdd = function(fx, fy, sx, sy, val = 1) {
     }
 };
 
+paintUnitAdd = function(fx, fy, sx, sy, val = 1) {
+    if (val == 1) {
+    let c = ge.activeCanvas.data;
+    let y = fy + ge.activeTab.scroll.y + ge.paintingOffsetY;
+    let xy = sx + (sy * 7);
+    if (c[y]) {
+        if (c[y][fx]) {
+            c[y][fx][xy] = val;
+        } else {
+            c[y][fx] = [];
+            c[y][fx][xy] = val;
+        }
+    } else {
+        c[y] = [];
+        c[y][fx] = [];
+        c[y][fx][xy] = val;
+    }
+}
+};
+
 paintUnitSubtract = function(fx, fy, sx, sy, val = 1) {
     let c = ge.activeCanvas.data;
     let y = fy + ge.activeTab.scroll.y + ge.paintingOffsetY;
