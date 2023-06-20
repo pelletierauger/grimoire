@@ -25,7 +25,7 @@ drawTerminal = function(selectedProgram) {
     // 
     if (ge.activeTab !== null && ge.t.darkPixels) {
         let d = ge.t.darkPixels.canvas.data;
-        let m = (mode == 2) ? 0 : 2;
+        let m = (mode == 2) ? ((showPatterns) ? 0 : 2) : 2;
         for (let y = 0; y < 22 + 1 + m; y++) {
             for (let x = 0; x < 109; x++) {
                 if (d[y + ge.t.scroll.y] && d[y + ge.t.scroll.y][x]) {
