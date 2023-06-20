@@ -961,7 +961,8 @@ GrimoireTab.prototype.display = function() {
     // drawAlligatorQuietVert(currentProgram);
     currentProgram = getProgram("new-flickering-dots");
     gl.useProgram(currentProgram);
-    drawAlligatorQuiet(currentProgram);
+    drawSwirl(currentProgram);
+    // drawDots(currentProgram);
     currentProgram = getProgram("rounded-square");
     time = gl.getUniformLocation(currentProgram, "time"); 
     disturb = gl.getUniformLocation(currentProgram, "disturb"); 
@@ -3004,7 +3005,7 @@ paintingKeys = function(e) {
     } else if (s == "ArrowUp") {
         // t.moveCaretsY(-1);
         t.scroll.y = Math.max(0, t.scroll.y - 1);
-    } else if (s == "s") {
+    } else if (s == "p") {
         switch(patternScale) {
             case 1: patternScale = 0.5; break;
             case 0.5: patternScale = 0.25; break;
@@ -3039,6 +3040,14 @@ paintingKeys = function(e) {
         ge.t.scroll.y += 25;
     } else if (s == "f") {
         ge.flipCanvas();
+    } else if (s == "w") {
+        patternYOffset--;
+    } else if (s == "a") {
+        patternXOffset--;
+    } else if (s == "s") {
+        patternYOffset++;
+    } else if (s == "d") {
+        patternXOffset++;
     }
     // console.log(s);
 };
