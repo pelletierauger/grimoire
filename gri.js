@@ -3617,7 +3617,7 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     }
     //  Drawing the dithered array back into the visible canvas.
     let canvasDestination = ge.getTab(c1).canvas.data;
-    paintStatic = function(fx, fy, sx, sy, val = 1) {
+    let paintStatic = function(fx, fy, sx, sy, val = 1) {
         let c = canvasDestination;
         let y = fy;
         let xy = sx + (sy * 7);
@@ -3756,7 +3756,7 @@ GrimoireEditor.prototype.blurCanvas = function(c0, x0, y0, x1, y1, c1, x2, y2) {
     }
     //  Drawing the dithered array back into the visible canvas.
     let canvasDestination = ge.getTab(c1).canvas.data;
-    paintStatic = function(fx, fy, sx, sy, val = 1) {
+    let paintStatic = function(fx, fy, sx, sy, val = 1) {
         let c = canvasDestination;
         let y = fy;
         let xy = sx + (sy * 7);
