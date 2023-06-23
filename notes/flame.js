@@ -48,8 +48,6 @@ makeFlame = function() {
 };
 makeFlame();
 
-
-
 paintStaticAddSubstract = function(c, x, y, brush, pattern) {
     c = ge.getTab(c).canvas.data;
     pattern = pattern.grid;
@@ -85,4 +83,47 @@ paintStaticAddSubstract = function(c, x, y, brush, pattern) {
             c[y][fx][xy] = val;
         }
     };
+};
+
+GrimoireEditor.prototype.xFadeWithZeroes = function(cA, xA0, yA0, xA1, yA1, cC, xC, yC, interpolation, interpolationArray = xFadeArray) {
+    cA = this.getTab(cA).canvas.data;
+    cC = this.getTab(cC).canvas.data;
+    interpolation = Math.floor(interpolation * 256);
+    for (let i = yA0; i < yA1; i++) {
+        for (let j = xA0; j < xA1; j++) {
+            for (let k = 0; k < 7 * 9; k++) {
+                let x = (j - xA0) * 7 + (k % 7);
+                let y = (i - yA0) * 9 + Math.floor(k / 7);
+                let oneD = x + (y * 109 * 7);
+                if (interpolationArray[oneD] > interpolation) {
+                    let takeVal = (cA[i] && cA[i][j] && cA[i][j][k]) ? cA[i][j][k] : 0;
+                    if (cC[yC + i - yA0]) {
+                        if (cC[yC + i - yA0][xC + j - xA0]) {
+                            cC[yC + i - yA0][xC + j - xA0][k] = takeVal;
+                        } else {
+                            cC[yC + i - yA0][xC + j - xA0] = [];
+                            cC[yC + i - yA0][xC + j - xA0][k] = takeVal;
+                        }
+                    } else {
+                        cC[yC + i - yA0] = [];
+                        cC[yC + i - yA0][xC + j - xA0] = [];
+                        cC[yC + i - yA0][xC + j - xA0][k] = takeVal;
+                    }
+                } else {
+                    if (cC[yC + i - yA0]) {
+                        if (cC[yC + i - yA0][xC + j - xA0]) {
+                            cC[yC + i - yA0][xC + j - xA0][k] = 0;
+                        } else {
+                            cC[yC + i - yA0][xC + j - xA0] = [];
+                            cC[yC + i - yA0][xC + j - xA0][k] = 0;
+                        }
+                    } else {
+                        cC[yC + i - yA0] = [];
+                        cC[yC + i - yA0][xC + j - xA0] = [];
+                        cC[yC + i - yA0][xC + j - xA0][k] = 0;
+                    }
+                }
+            }
+        }
+    }
 };
