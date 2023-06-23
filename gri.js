@@ -961,7 +961,7 @@ GrimoireTab.prototype.display = function() {
     // drawAlligatorQuietVert(currentProgram);
     currentProgram = getProgram("new-flickering-dots");
     gl.useProgram(currentProgram);
-    drawSwirl(currentProgram);
+    // drawSwirl(currentProgram);
     // drawDots(currentProgram);
     currentProgram = getProgram("rounded-square");
     time = gl.getUniformLocation(currentProgram, "time"); 
