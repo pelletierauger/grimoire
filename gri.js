@@ -2996,6 +2996,7 @@ applyPointer = function() {
 
 patternScale = 1;
 paintingMode = 0;
+eraserMode = 1;
 paintingKeys = function(e) {
     let s = e.key;
     let t = ge.activeTab;
@@ -3048,6 +3049,8 @@ paintingKeys = function(e) {
         patternYOffset++;
     } else if (s == "d") {
         patternXOffset++;
+    } else if (s == "e") {
+        eraserMode = !eraserMode;
     }
     // console.log(s);
 };

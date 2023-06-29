@@ -364,8 +364,10 @@ roundedSquare.fragText = `
         float d = length(max(abs(uv - pos), size * 0.5) - size * 0.5) * w - radius * 0.01;
         float oscFull = (sin(t2) * 0.5 + 0.5) * 3.75 * 0.;
         float oscScanning = (sin(gl_FragCoord.y * 1e-2 + t2) * 0.5 + 0.5) * 4.;
-        return smoothstep(2.99 + oscFull + oscScanning, 0.11, d * 10. / thickness * 5.0 * 0.125 * 1.5);
-    }
+        // return smoothstep(2.99 + oscFull + oscScanning, 0.11, d * 10. / thickness * 5.0 * 0.125 * 1.5);
+        // No oscScanning anymore.
+        return smoothstep(2.99 + oscFull + 1., 0.11, d * 10. / thickness * 5.0 * 0.125 * 1.5);
+     }
     float roundedRectangle (vec2 uv, vec2 pos, vec2 size, float radius, float thickness) {
         float d = length(max(abs(uv - pos), size) - size) - radius;
         return smoothstep(0.66, 0.33, d / thickness * 5.0);
@@ -3200,8 +3202,13 @@ movemouse = function(e) {
     if (mode == 2 && ge.activeTab !== null) {
         resetBrushPositions();
         if (e.altKey) {
-            let val = (e.shiftKey) ? 0 : 1;
-            paint(val);
+            if (e.shiftKey) {
+                if (eraserMode)  {
+                    erase(0);
+                } else {
+                    paint(1);
+                }
+            }
         }
     }
 };
@@ -3527,6 +3534,23 @@ paint = function(val = 1) {
         }
     }
 }
+
+erase = function(val = 1) {
+    let pat = (showPatterns) ? 2 : 0;
+    for (let y = 0; y < ge.brushPositions.length - (pat * 9); y++) {
+        for (let x = 0; x < ge.brushPositions[y].length; x++) {
+            let r = (brushRandom) ? Math.round(Math.random()) : true;
+            if (ge.brushPositions[y][x] && r) {
+                let rand = Math.round(Math.random() - Math.random());
+                let pattern = full.grid;
+                let pdim = [pattern[0].length, pattern.length];
+                let vv = pattern[Math.floor(((ge.activeTab.scroll.y * 9 ) + y + patternYOffset) * patternScale) % pdim[1]][Math.floor((x + patternXOffset) * patternScale) % pdim[0]];
+                if (val == 0) {vv = 1 - vv};
+                ge.paintingFunction(Math.floor(x/7),Math.floor(y/9), x%7,y%9, vv);
+            }
+        }
+    }
+};
 patternYOffset = 0;
 patternXOffset = 0;
 
