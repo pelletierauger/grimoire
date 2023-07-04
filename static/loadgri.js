@@ -50,8 +50,8 @@ for (let i = 0; i < tabsToLoad.length; i++) {
     .then((data) => {
         if (name == "intro.js") {
             tb("intro");
-            ge.activeTab.carets[0].x = 80;
-            ge.activeTab.carets[0].y = 24;
+            ge.activeTab.carets[0].x = 80+2;
+            ge.activeTab.carets[0].y = 24-3;
             tl();
             grimoire = true;
         }
