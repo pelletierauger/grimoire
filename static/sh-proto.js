@@ -374,3 +374,11 @@ vec3 hueShift2( vec3 color, float hueAdjust ){
 // ----------------------------------- End of Color blending math --------------------------
 // endGLSL
 `;
+
+
+let Animation = function(shaderProgram, display, amountOfVertices) {
+    this.shaderProgram = shaderProgram;
+    // this.vert = vert;
+    this.display = display;
+    this.amountOfVertices = amountOfVertices;
+};

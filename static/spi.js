@@ -1812,7 +1812,7 @@ drawAlligatorQuietVert = function(selectedProgram) {
     // Clear the color buffer bit
     // gl.clear(gl.COLOR_BUFFER_BIT);
     // Draw the triangle
-    gl.drawArrays(gl.POINTS, 0, amountOfVertices);
+    gl.drawArrays(gl.POINTS, 0, backgroundAnimation.amountOfVertices);
 }
 
 drawScratches = function() {

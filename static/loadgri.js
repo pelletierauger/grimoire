@@ -69,13 +69,18 @@ displayBackground = true;
     let currentProgram = getProgram("pulsar-fog");
     gl.useProgram(currentProgram);
     // drawBG(currentProgram);
-    if (displayBackground) {
-        currentProgram = getProgram("new-flickering-dots-vert");
+    // if (displayBackground) {
+    if (backgroundAnimation) {
+        currentProgram = backgroundAnimation.shaderProgram.program;
         gl.useProgram(currentProgram);
-        drawAlligatorQuietVert(currentProgram);
+        backgroundAnimation.display(currentProgram);
     }
-    currentProgram = getProgram("new-flickering-dots");
-    gl.useProgram(currentProgram);
+        // currentProgram = getProgram("new-flickering-dots-vert");
+        // gl.useProgram(currentProgram);
+        // drawAlligatorQuietVert(currentProgram);
+    // }
+    // currentProgram = getProgram("new-flickering-dots");
+    // gl.useProgram(currentProgram);
     // drawAlligatorQuiet(currentProgram);
     // drawMeadow(currentProgram);
     // drawSmoke(currentProgram);
