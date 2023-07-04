@@ -2767,6 +2767,19 @@ getGlyph = function(g) {
             "0000000"
         ];
         break;
+        case "·":
+        ch = [
+            "0000000",
+            "0000000",
+            "0000000",
+            "0001000",
+            "0001000",
+            "0000000",
+            "0000000",
+            "0000000",
+            "0000000",
+        ];
+        break;
         default:
         ch = [
             "0000000",
@@ -3206,8 +3219,10 @@ movemouse = function(e) {
                 if (eraserMode)  {
                     erase(0);
                 } else {
-                    paint(1);
+                    paint(0);
                 }
+            } else {
+                paint(1);
             }
         }
     }
