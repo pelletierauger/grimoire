@@ -425,14 +425,14 @@ drawSmoke = function(selectedProgram) {
         //         y -= Math.sin(fy * fy * 0.018) * 7.5 * 2;
         // Below, I changed the range of the inner oscillator to [-0.65, 1]
         // to reduce the amount of time it destroys the harmonic shape.
-        fx = tan(x * 0.15 * (map(sin(t * 2), -1, 1, -0.65, 1))) * 40;
-        fy = tan(y * 0.15 * (map(sin(t * 2), -1, 1, -0.65, 1))) * 40;
+        fx = Math.tan(x * 0.15 * (map(Math.sin(t * 2), -1, 1, -0.65, 1))) * 40;
+        fy = Math.tan(y * 0.15 * (map(Math.sin(t * 2), -1, 1, -0.65, 1))) * 40;
         //         x += (Math.random() - 0.5) * 0.00005;
         //         y += (Math.random() - 0.5) * 0.00005;
         // x += xOffset * 0.125;
         // y += yOffset * 0.125;
-        x += cos(t * -0.5e2 * 0.25) * i * 0.125e-4 * 2 * 0.5;
-        y += sin(t * -0.5e2 * 0.25) * i * 0.125e-4 * 3 * 0.5;
+        x += Math.cos(t * -0.5e2 * 0.25) * i * 0.125e-4 * 2 * 0.5;
+        y += Math.sin(t * -0.5e2 * 0.25) * i * 0.125e-4 * 3 * 0.5;
         x += xOffset * 0.15 * 2 * 0.2 * 6.5 * 0.25;
         y += yOffset * 0.15 * 3 * 0.2 * 6.5 * 0.25;
         x += xOffset2 * 2 * 1e-3 * 0.5 * 6.5 * 0.25;
