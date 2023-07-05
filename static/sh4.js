@@ -416,32 +416,17 @@ drawSmoke = function(selectedProgram) {
     t *= 0.4;
     t += 115;
     for (let i = 0; i < 40000; i += 1) {
-        x = fx * 0.16 + Math.sin(Math.tan(i * 24.9 + t * 0.5) + i * t * 0.000001) * i * 0.000022;
-        y = fy * 0.16 + Math.cos(Math.tan(i * 24.9 + t * 0.5) + i * t * 0.000001) * i * 0.00005;
-        //         x *= Math.cos(fx * fy * 0.001 * t * 5) * Math.sin(x + t * 10);
-        //         x *= Math.cos(fx * fy * 0.001 * t * 7) * Math.sin(x + t * 15);
-        //         y *= cos(fx * fy * 0.001) * cos(x + t + 2 * 10);
-        //         x -= Math.sin(fx * fx * fy * Math.cos(fy * 400) * 0.018) * 7.5 * 2;
-        //         y -= Math.sin(fy * fy * 0.018) * 7.5 * 2;
-        // Below, I changed the range of the inner oscillator to [-0.65, 1]
-        // to reduce the amount of time it destroys the harmonic shape.
+        x = fx * 0.16 + Math.sin(Math.tan(i * 24.9 + t * 0.5) + i * t * 1e-6) * i * 0.000022;
+        y = fy * 0.16 + Math.cos(Math.tan(i * 24.9 + t * 0.5) + i * t * 1e-6) * i * 0.00005;
         fx = Math.tan(x * 0.15 * (map(Math.sin(t * 2), -1, 1, -0.65, 1))) * 40;
         fy = Math.tan(y * 0.15 * (map(Math.sin(t * 2), -1, 1, -0.65, 1))) * 40;
-        //         x += (Math.random() - 0.5) * 0.00005;
-        //         y += (Math.random() - 0.5) * 0.00005;
-        // x += xOffset * 0.125;
-        // y += yOffset * 0.125;
         x += Math.cos(t * -0.5e2 * 0.25) * i * 0.125e-4 * 2 * 0.5;
         y += Math.sin(t * -0.5e2 * 0.25) * i * 0.125e-4 * 3 * 0.5;
-        x += xOffset * 0.15 * 2 * 0.2 * 6.5 * 0.25;
-        y += yOffset * 0.15 * 3 * 0.2 * 6.5 * 0.25;
-        x += xOffset2 * 2 * 1e-3 * 0.5 * 6.5 * 0.25;
-        y += yOffset2 * 3 * 1e-3 * 0.5 * 6.5 * 0.25;
-        let xo = openSimplex.noise2D(i, t * 1e4) * 1e-3;
-        let yo = openSimplex.noise2D(i, t * 1e4 + 1000) * 1e-3;
-        let zo = (openSimplex.noise2D(i, (t + i) * 1e2 + 100)) * 5;
-        let s = 0.7;
-        vertices.push((x + xo) * 1.3 * 1.5 * s, (y + yo) * 0.9 * 1.5 * s - 0.25, 15.0 + zo, al);
+        x += xOffset * 0.0975;
+        y += yOffset * 0.14625;
+        x += xOffset2 * 0.001625;
+        y += yOffset2 * 0.002437;
+        vertices.push(x * 1.365, y * 0.945 - 0.25, 15.0, al);
     }
     // Create an empty buffer object to store the vertex buffer
     // var vertex_buffer = gl.createBuffer();
