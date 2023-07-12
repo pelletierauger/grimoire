@@ -3284,8 +3284,15 @@ downmouse = function(e) {
                 if (!e.metaKey) {
                     t.carets = [];
                 }
-                let x = Math.min(t.data[fmouse[1] + t.scroll.y].length, fmouse[0]);
-                t.carets.push({x: x, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: null});
+                if ((fmouse[1] + t.scroll.y) < t.data.length) {
+                    let x = Math.min(t.data[fmouse[1] + t.scroll.y].length, fmouse[0]);
+                    t.carets.push({x: x, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: null});
+                } else {
+                    while (t.data.length < (fmouse[1] + t.scroll.y + 1)) {
+                        t.data.push("");
+                    }
+                    t.carets.push({x: 0, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: null});
+                }
             }
         }
     }
@@ -3561,7 +3568,7 @@ erase = function(val = 1) {
                 let pdim = [pattern[0].length, pattern.length];
                 let vv = pattern[Math.floor(((ge.activeTab.scroll.y * 9 ) + y + patternYOffset) * patternScale) % pdim[1]][Math.floor((x + patternXOffset) * patternScale) % pdim[0]];
                 if (val == 0) {vv = 1 - vv};
-                ge.paintingFunction(Math.floor(x/7),Math.floor(y/9), x%7,y%9, vv);
+                paintUnit(Math.floor(x/7),Math.floor(y/9), x%7,y%9, vv);
             }
         }
     }
