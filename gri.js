@@ -665,15 +665,16 @@ GrimoireTab.prototype.deleteLine = function() {
 // };
 
 splitGo = function(s) {
-    let goTest = /(^go\s|^l\s)([\s\S]*)/;
+    let goTest = /(^\s*)(go\s|^l\s)([\s\S]*)(\d*)/;
     let test = goTest.exec(s);
+    // console.log(test);
     if (test) {
-        let params = s.split(' ');
-        let i = parseInt(params[2]);
-        if (params.length == 3 && (i == 0 || i)) {
-            go_to(params[1], i);
-        }   else if (params.length == 2) {
-            go_to(params[1]);
+        let params = test[3].split(' ');
+        let i = parseInt(params[1]);
+        if (params.length == 2 && (i == 0 || i)) {
+            go_to(params[0], i);
+        }   else if (params.length == 1) {
+            go_to(params[0]);
         }
         return true;
     } else {
