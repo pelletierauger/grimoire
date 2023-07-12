@@ -119,7 +119,7 @@ drawTerminal = function(selectedProgram) {
             for (let x = ge.evaluatedLines[2]; x < 109; x++) {
                 let sy = y + ge.activeTab.scroll.y;
                 if (sy >= ge.evaluatedLines[0] && sy < ge.evaluatedLines[1]) {
-                    if (x == 0 || x < ge.activeTab.data[sy].length) {
+                    if (x == 0 || (ge.activeTab.data[sy] && (x < ge.activeTab.data[sy].length))) {
                         selections[y][x] = 1;
                     } else {
                         selections[y][x] = 0;
