@@ -1084,6 +1084,10 @@ GrimoireEditor.prototype.update = function(e) {
         } else if (s == "ArrowDown") {
             t.moveCaretsY(1);
             updateHistory = false;
+        } else if (s == "Home") {
+            // for (let i = 0; i < 25; i++) {t.moveCaretsY(-1);}
+                t.scroll.y = 0;
+            updateHistory = false;
         } else if (s == "PageUp") {
             for (let i = 0; i < 25; i++) {t.moveCaretsY(-1);}
             updateHistory = false;
