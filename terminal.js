@@ -197,7 +197,7 @@ drawTerminal = function(selectedProgram) {
             //     // g = getGlyph(char);
             // };
             if (selections !== null && (y < ((mode == 1) ? 22 + 3 : 20 + 3))) {
-                selection = (selections[y][x] && x < ge.activeTab.data[y+ge.activeTab.scroll.y].length + 1) ? true : selection;
+                selection = (selections[y][x] && ((ge.activeTab.data[y+ge.activeTab.scroll.y]) && (x < ge.activeTab.data[y+ge.activeTab.scroll.y].length + 1))) ? true : selection;
             }
             let maxloopy = 0;
             if (char !== " " || caret == true || cur || selection || paint || mode == 2) {
@@ -2780,6 +2780,19 @@ getGlyph = function(g) {
             "0000000",
         ];
         break;
+        // case "œ":
+        // ch = [
+        //     "0000000",
+        //     "0000000",
+        //     "0011100",
+        //     "0101010",
+        //     "0101110",
+        //     "0101000",
+        //     "0011100",
+        //     "0000000",
+        //     "0000000",
+        // ];
+        // break;
         default:
         ch = [
             "0000000",

@@ -329,7 +329,7 @@ drawSwirl = function(selectedProgram) {
     // let al = map(sin(t * 1e6), -1, 1, 0.1, 1);
     let t3 = t * 1e5;
     let al = map(openSimplex.noise2D(t3, t3 + 1000), -1, 1, 0.5, 1);
-    for (let i = 0; i < 60000; i += 1) {
+    for (let i = 0; i < this.amountOfVertices; i += 1) {
         let ax = Math.pow(Math.cos(fx * 1e-4 + i * 1e-4), -1);
         let ay = Math.pow(Math.cos(fx * 1e-4 + i * 1e-4), -1);
         let aax = 0.5 - ax;
@@ -358,7 +358,10 @@ drawSwirl = function(selectedProgram) {
         let xo = 0;
         let yo = 0;
         //         let zo = (openSimplex.noise2D(i, (t + i) * 1e2 + 100)) * 5;
-        vertices.push((x + xo * 6.5) * 1.5 * 0.15, (y + yo * 6.5) * 0.8 * 0.15 * 1.1, 14.0, al);
+        vertices.push(
+            (x + xo * 6.5) * 1.5 * 0.15 * this.scale, 
+            (y + yo * 6.5) * 0.8 * 0.15 * 1.1 * this.scale, 
+            14.0, al);
     }
     // Create an empty buffer object to store the vertex buffer
     // var vertex_buffer = gl.createBuffer();
@@ -388,12 +391,12 @@ drawSwirl = function(selectedProgram) {
     // gl.vertexAttribPointer(coord, 1, gl.FLOAT, false, 0, 0);
     gl.uniform1f(scalar, resolutionScalar);
     let dotsToDraw = Math.floor(map(drawCount, 0, 2400 - 672, 60000, 0));
-    dotsToDraw = 60000;
-    gl.drawArrays(gl.POINTS, 0, dotsToDraw);
+    // dotsToDraw = 60000;
+    gl.drawArrays(gl.POINTS, 0, this.amountOfVertices);
     // console.log("aaa");
 }
 
-let swirl = new Animation(newFlickering, drawSwirl, 147456);
+let swirl = new Animation(newFlickering, drawSwirl, 60000);
 
 
 drawSmoke = function(selectedProgram) {
@@ -415,7 +418,7 @@ drawSmoke = function(selectedProgram) {
     let al = map(openSimplex.noise2D(t3, t3 + 1000), -1, 1, 0.025, 1.25);
     t *= 0.4;
     t += 115;
-    for (let i = 0; i < 40000; i += 1) {
+    for (let i = 0; i < this.amountOfVertices; i += 1) {
         x = fx * 0.16 + Math.sin(Math.tan(i * 24.9 + t * 0.5) + i * t * 1e-6) * i * 0.000022;
         y = fy * 0.16 + Math.cos(Math.tan(i * 24.9 + t * 0.5) + i * t * 1e-6) * i * 0.00005;
         fx = Math.tan(x * 0.15 * (map(Math.sin(t * 2), -1, 1, -0.65, 1))) * 40;
@@ -426,7 +429,10 @@ drawSmoke = function(selectedProgram) {
         y += yOffset * 0.14625;
         x += xOffset2 * 0.001625;
         y += yOffset2 * 0.002437;
-        vertices.push(x * 1.365, y * 0.945 - 0.25, 15.0, al);
+        vertices.push(
+            (x * 1.365) * this.scale, 
+            (y * 0.945 - 0.25) * this.scale, 
+            15.0, al);
     }
     // Create an empty buffer object to store the vertex buffer
     // var vertex_buffer = gl.createBuffer();
@@ -454,9 +460,9 @@ drawSmoke = function(selectedProgram) {
     // Point an attribute to the currently bound VBO
     // gl.vertexAttribPointer(coord, 1, gl.FLOAT, false, 0, 0);
     gl.uniform1f(scalar, resolutionScalar);
-    let dotsToDraw = Math.floor(map(drawCount, 0, 2400 - 672, 60000, 0));
-    dotsToDraw = 40000;
-    gl.drawArrays(gl.POINTS, 0, dotsToDraw);
+    // let dotsToDraw = Math.floor(map(drawCount, 0, 2400 - 672, 60000, 0));
+    // dotsToDraw = 40000;
+    gl.drawArrays(gl.POINTS, 0, this.amountOfVertices);
 };
 
 let smokySpiral = new Animation(newFlickering, drawSmoke, 40000);

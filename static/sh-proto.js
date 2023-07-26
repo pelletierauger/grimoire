@@ -381,4 +381,5 @@ let Animation = function(shaderProgram, display, amountOfVertices) {
     // this.vert = vert;
     this.display = display;
     this.amountOfVertices = amountOfVertices;
+    this.scale = 1;
 };
