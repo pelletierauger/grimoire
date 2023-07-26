@@ -3070,7 +3070,7 @@ wheelY = function(e) {
         }]);
     }
     if (ge.activeTab !== null && grimoire) {
-        let delta = Math.floor(e.deltaY * 0.125 * 0.125);
+        let delta = Math.floor(e.deltaY * 0.125);
         // if (e.deltaY > 0) {
             // ge.activeTab.scroll.y = Math.min(ge.activeTab.scroll.y + delta, ge.activeTab.data.length - 25);
             // ge.activeTab.scroll.y = Math.max(ge.activeTab.scroll.y + delta, 0);
