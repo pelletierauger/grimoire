@@ -257,6 +257,12 @@ GrimoireEditor.prototype.saveCanvas = function() {
     }
 };
 
+GrimoireEditor.prototype.downloadCanvas = function() {
+    if (this.activeTab !== null) {
+        this.activeTab.saveCanvas();
+    }
+};
+
 
 GrimoireEditor.prototype.canvasToCanvas = function(c0, x0, y0, x1, y1, c1, x, y) {
     c0 = this.getTab(c0);
@@ -450,6 +456,63 @@ GrimoireTab.prototype.saveCanvas = function() {
         // console.log(data.length);
         socket.emit('saveFile', {path: this.canvasPath, data: asciiString});
         this.canvasData = asciiString;
+    }
+};
+
+GrimoireTab.prototype.downloadCanvas = function() {
+    let data = "";
+    let gc = this.canvas;
+    if (gc.data.length > 0) {
+        for (let i = 0; i < gc.data.length; i++) {
+            for (let j = 0; j < 109; j++) {
+                for (let k = 0; k < 63; k++) {
+                    if (gc.data[i] && gc.data[i][j] && gc.data[i][j][k]) {
+                        data = data + "1";
+                    } else {
+                        data = data + "0"
+                    }
+                    // data = data + ((gc.data[i][j][k] == 1) ? "1" : "0");
+                }
+            }
+        }
+        let asciiString = "";
+        for (let i = 0; i < data.length; i += 7) {
+            let ss = data.substring(i, Math.min(i + 7, data.length));
+            // ss = ss.padStart(7, "0");
+            let n = parseInt(ss, 2);
+            if (n < 32) {
+                ascii = "éÉèÈêÊëËçÇàÀùÙÇüÜäÄöÖÿŸćńóśźĄąĘę"[n];
+            } else if (n == 127) {
+                ascii = "Ż";
+            } else {
+                ascii = String.fromCharCode(n);
+            }
+            // let ascii = String.fromCharCode(parseInt(ss,2));
+            asciiString = asciiString + ascii;
+            // console.log (ss + ", " + ascii);
+        }
+        // console.log(asciiString.length);
+        
+        asciiString = asciiString.replace(/(é)(\1*)/g, (a, b, c) => {
+            return (a.length > 3) ? "Ć" + a.length + "Ć" : a;
+        });
+        asciiString = asciiString.replace(/(Ż)(\1*)/g, (a, b, c) => {
+            return (a.length > 3) ? "Ł" + a.length + "Ł" : a;
+        });
+        // console.log(asciiString.length);
+        // console.log(data.length);
+        // socket.emit('saveFile', {path: this.canvasPath, data: asciiString});
+        // this.canvasData = asciiString;
+        download(this.name + ".txt", asciiString);
+    }
+    function download(filename, text) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
     }
 };
 
