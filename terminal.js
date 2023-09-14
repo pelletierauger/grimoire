@@ -76,63 +76,63 @@ drawTerminal = function(selectedProgram) {
             applyPointer();
         }
     }   
-// 
+    // 
     let editorSelection = false;
     let selections = null;
     let oneD = function(x, y) {return x + (y * 109)};
     if (ge.activeTab !== null) {
         let t = ge.activeTab;
-            let sel = false;
-    for (let i = 0; i < t.carets.length; i++) {
-        let c = t.carets[i];
-        // console.log(c);
-        if (c.sel !== null) {
-            sel = true;
+        let sel = false;
+        for (let i = 0; i < t.carets.length; i++) {
+            let c = t.carets[i];
+            // console.log(c);
+            if (c.sel !== null) {
+                sel = true;
+            }
         }
-    }
-    if (sel) {
-        // ctt++;
-        selections = [];
-        for (let y = 0; y < 22 + 3; y++) {
-            selections[y] = [];
-            for (let x = 0; x < 109; x++) {
-                selections[y][x] = 0;
-                for (let i = 0; i < ge.activeTab.carets.length; i++) {
-                    let c = ge.activeTab.carets[i];
-                    if (c.sel !== null) {
-                        let oy = ge.activeTab.scroll.y + y;
-                        let span = [oneD(c.x, c.y), oneD(c.sel[0], c.sel[1])].sort(function(a, b) {
-                            return a - b;
-                        });
-                        if (oneD(x, oy) >= span[0] && oneD(x, oy) < span[1]) {
-                            selections[y][x] = 1;
+        if (sel) {
+            // ctt++;
+            selections = [];
+            for (let y = 0; y < 22 + 3; y++) {
+                selections[y] = [];
+                for (let x = 0; x < 109; x++) {
+                    selections[y][x] = 0;
+                    for (let i = 0; i < ge.activeTab.carets.length; i++) {
+                        let c = ge.activeTab.carets[i];
+                        if (c.sel !== null) {
+                            let oy = ge.activeTab.scroll.y + y;
+                            let span = [oneD(c.x, c.y), oneD(c.sel[0], c.sel[1])].sort(function(a, b) {
+                                return a - b;
+                            });
+                            if (oneD(x, oy) >= span[0] && oneD(x, oy) < span[1]) {
+                                selections[y][x] = 1;
+                            }
                         }
                     }
                 }
             }
         }
-    }
-    if (ge.evaluated) {
-        if (selections == null) {selections = []};
-        for (let y = 0; y < 22 + 3; y++) {
-            selections[y] = [];
-            for (let x = ge.evaluatedLines[2]; x < 109; x++) {
-                let sy = y + ge.activeTab.scroll.y;
-                if (sy >= ge.evaluatedLines[0] && sy < ge.evaluatedLines[1]) {
-                    if (x == 0 || (ge.activeTab.data[sy] && (x < ge.activeTab.data[sy].length))) {
-                        selections[y][x] = 1;
+        if (ge.evaluated) {
+            if (selections == null) {selections = []};
+            for (let y = 0; y < 22 + 3; y++) {
+                selections[y] = [];
+                for (let x = ge.evaluatedLines[2]; x < 109; x++) {
+                    let sy = y + ge.activeTab.scroll.y;
+                    if (sy >= ge.evaluatedLines[0] && sy < ge.evaluatedLines[1]) {
+                        if (x == 0 || (ge.activeTab.data[sy] && (x < ge.activeTab.data[sy].length))) {
+                            selections[y][x] = 1;
+                        } else {
+                            selections[y][x] = 0;
+                        }
                     } else {
                         selections[y][x] = 0;
                     }
-                } else {
-                    selections[y][x] = 0;
                 }
             }
+            if (ge.evaluated > 0) {ge.evaluated--};
         }
-        if (ge.evaluated > 0) {ge.evaluated--};
     }
-}
-//     
+    //     
     for (let y = 0; y < Math.floor(nt / 109); y++) {
         for (let x = 0; x < 109; x++) {
             let char;
