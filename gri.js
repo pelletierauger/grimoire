@@ -423,6 +423,7 @@ let GrimoireTab = function(o) {
     this.lastEdited = null;
     this.headState = null;
     this.attachedHeadState = true;
+    this.highlights = [];
     ge.tabs.push(this);
 };
 
