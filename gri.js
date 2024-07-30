@@ -295,7 +295,7 @@ GrimoireEditor.prototype.c2c = function(y0, y1, c0, c1) {
         y0 = ge.t.scroll.y;
     }
     if (y1 == null) {
-        y1 = ge.t.scroll.y + 25;
+        y1 = ge.t.scroll.y + 35;
     }
     if (c0 == null) {
         c0 = this.t.name;
@@ -303,7 +303,7 @@ GrimoireEditor.prototype.c2c = function(y0, y1, c0, c1) {
     if (c1 == null) {
         c1 = this.t.name;
     }
-    this.canvasToCanvas(c0, 0, y0, 109, y0 + 25, c1, 0, y1);
+    this.canvasToCanvas(c0, 0, y0, 109, y0 + 35, c1, 0, y1);
 };
 
 GrimoireEditor.prototype.c2cRel = function(y0, y1, c0, c1) {
@@ -314,7 +314,7 @@ GrimoireEditor.prototype.c2cRel = function(y0, y1, c0, c1) {
         y0 = y0 + y;
     }
     if (y1 == null) {
-        y1 = y + 25;
+        y1 = y + 35;
     } else {
         y1 = y1 + y;
     }
@@ -324,7 +324,7 @@ GrimoireEditor.prototype.c2cRel = function(y0, y1, c0, c1) {
     if (c1 == null) {
         c1 = this.t.name;
     }
-    this.canvasToCanvas(c0, 0, y0, 109, y0 + 25, c1, 0, y1);
+    this.canvasToCanvas(c0, 0, y0, 109, y0 + 35, c1, 0, y1);
 };
 
 GrimoireEditor.prototype.canvasToCanvasAdd = function(c0, x0, y0, x1, y1, c1, x, y) {
@@ -1078,9 +1078,9 @@ GrimoireTab.prototype.display = function() {
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     itemSize = 2;
     numItems = vertices.length / itemSize;
-    textureShader.aVertexPosition = gl.getAttribLocation(textureShader, "a_position");
-    gl.enableVertexAttribArray(textureShader.aVertexPosition);
-    gl.vertexAttribPointer(textureShader.aVertexPosition, itemSize, gl.FLOAT, false, 0, 0);
+    let positionAttribLocation = gl.getAttribLocation(textureShader, "a_position");
+    gl.enableVertexAttribArray(positionAttribLocation);
+    gl.vertexAttribPointer(positionAttribLocation, itemSize, gl.FLOAT, false, 0, 0);
     // 
     var textureLocation = gl.getUniformLocation(textureShader, "u_texture");
     gl.uniform1i(textureLocation, 0);
@@ -1239,7 +1239,7 @@ GrimoireEditor.prototype.update = function(e) {
 
 
 marr = [];
-for (let y = 0; y < 25; y++) {
+for (let y = 0; y < 35; y++) {
     marr.push([]);
     for (let x = 0; x < 110; x++) {
         marr[y].push(0);
@@ -1251,11 +1251,11 @@ updateHole = function() {
             let x = Math.cos(i * 0.5 + drawCount * 0.125e2) * i / 40;
             let y = Math.sin(i * 0.5 + drawCount * 0.125e2) * i / 40;
             x = Math.floor(map(x, -1, 1, 0, 70) + 18);
-            y = Math.floor(map(y, -1, 1, 0, 25));
+            y = Math.floor(map(y, -1, 1, 0, 35));
             marr[y][x] = 10;
         }
         let g = ge.activeTab;
-        for (let y = 0; y < 25; y++) {
+        for (let y = 0; y < 35; y++) {
             let padding = "";
             let row = [];
             for (let x = 0; x < 110; x++) {
@@ -2950,7 +2950,7 @@ makeCircles = function() {
         for (let y = 0; y < w; y++) {
             a[y] = [];
             for (let x = 0; x < w; x++) {
-                let v = dist(x, y * 1.75, hw, hw * 1.75);
+                let v = dist(x, y * 1, hw, hw * 1);
                 // 46.5, 36.5, 26.9, 17.85, 18.2, 11.95, 5
                 v = (v < cutoffs[i]) ? 1 : 0;
                 a[y][x] = v;
@@ -2975,14 +2975,14 @@ makeCircles();
 
 resetBrushPositions = function() {
     ge.brushPositions = [];
-    for (let y = 0; y < 25 * 9; y++) {
+    for (let y = 0; y < 35 * 9; y++) {
         ge.brushPositions[y] = [];
         for (let x = 0; x < 109 * 7; x++) {
             ge.brushPositions[y][x] = 0;
         }
     }
     // console.log("reset!");
-    let yPaintMax = (showPatterns) ? 23 : 25;
+    let yPaintMax = (showPatterns) ? 23 + 10 - 1 : 25 + 10 - 1;
     if (fmouse[1] < yPaintMax) {
         let b = ge.activeBrush;
         let tx = (fmouse[0] * 7) + smouse[0];
@@ -3030,16 +3030,19 @@ applyPointer = function() {
         [2, 2, 2, 2, 2, 0, 1, 1, 0, 2, 2, 2, 2, 2, 2],
         [2, 2, 2, 2, 2, 0, 1, 1, 0, 2, 2, 2, 2, 2, 2],
         [2, 2, 2, 2, 2, 0, 1, 1, 0, 2, 2, 2, 2, 2, 2],
-        [2, 0, 0, 2, 2, 0, 1, 1, 0, 0, 0, 0, 2, 2, 2],
+        [2, 2, 2, 2, 2, 0, 1, 1, 0, 2, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 0, 1, 1, 0, 0, 0, 0, 2, 2, 2],
+        [0, 0, 0, 0, 2, 0, 1, 1, 0, 1, 0, 1, 0, 0, 2],
         [0, 1, 1, 0, 2, 0, 1, 1, 0, 1, 0, 1, 0, 0, 2],
-        [2, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0],
-        [2, 2, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+        [2, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0],
         [2, 2, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
         [2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
         [2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
         [2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2],
         [2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 0, 2],
-        [2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 0, 2]
+        [2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 0, 2],
+        [2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 0, 2]
     ];
     let tx = (fmouse[0] * 7) + smouse[0];
     // let tox = Math.max(0, tx - b.anchor[0]);
@@ -3062,7 +3065,7 @@ applyPointer = function() {
     // let foy = Math.floor(toy / 9);
     // let soy = toy % 9;
     // let biymax = Math.min(b.data.length, 180 - (toy + b.data.length));
-    let biymax = b.length - (Math.max((ty + b.length) - 225, 0));
+    let biymax = b.length - (Math.max((ty + b.length) - ((25+10)*9), 0));
     // logJavaScriptConsole(biymax);
     // logJavaScriptConsole("ty: " + ty + " ,  b.anchor[1] :" +  b.anchor[1] + " , biy: " + biy + ", biymax: " + biymax);
     for (let y = biy; y < biymax; y++) {
@@ -3126,9 +3129,9 @@ paintingKeys = function(e) {
         showPatterns = !showPatterns;
         resetBrushPositions();
     } else if (s == "PageUp") {
-        ge.t.scroll.y = Math.max(0, ge.t.scroll.y - 25);
+        ge.t.scroll.y = Math.max(0, ge.t.scroll.y - 35);
     } else if (s == "PageDown") {
-        ge.t.scroll.y += 25;
+        ge.t.scroll.y += 35;
     } else if (s == "f") {
         ge.flipCanvas();
     } else if (s == "w") {
@@ -3274,8 +3277,8 @@ BrushFromString3 = function(s = "a", x = [1, 1, 1, 1, 1, 1, 1], y = [1, 1, 1, 1,
 // Basic xFade with white noise
 
 makeXFadeArray = function() {
-    xFadeArray = new Uint8Array(109 * 25 * 7 * 9);
-    for (let y = 0; y < 25 * 9; y++) {
+    xFadeArray = new Uint8Array(109 * 35 * 7 * 9);
+    for (let y = 0; y < 35 * 9; y++) {
         for (let x = 0; x < 109 * 7; x++) {
             xFadeArray[x + (y * 109 * 7)] = Math.floor(Math.random() * 256);
         }
@@ -3286,9 +3289,9 @@ makeXFadeArray = function() {
 // Fancier xFade with OpenSimplex noise
 
 makeXFadeArray = function() {
-    xFadeArray = new Uint8Array(109 * 25 * 7 * 9);
+    xFadeArray = new Uint8Array(109 * 35 * 7 * 9);
     let lerp = function(e,t,r){return r*(t-e)+e};
-    for (let y = 0; y < 25 * 9; y++) {
+    for (let y = 0; y < 35 * 9; y++) {
         for (let x = 0; x < 109 * 7; x++) {
             let nA = Math.floor((openSimplex.noise2D(x * 0.025, y * 0.025) * 0.5 + 0.5) * 256);
             let nB = Math.floor(Math.random() * 256);
@@ -3450,7 +3453,7 @@ GrimoireEditor.prototype.makeBlurredArray = function(c0, x0, y0, x1, y1) {
     }
     // Adding some white noise to the blurred array
     function lerp(e,t,r){return r*(t-e)+e};
-    let data3 = new Uint8Array(109 * 25 * 7 * 9);
+    let data3 = new Uint8Array(109 * 35 * 7 * 9);
     for (let i = 0; i < data.length; i++) {
         let nA = data[i];
         let nB = Math.floor(Math.random() * 256);

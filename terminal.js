@@ -9,9 +9,9 @@ drawTerminal = function(selectedProgram) {
         ge.play();
     }
     fmouse[0] = constrain(Math.floor(map(mouse.x, 78, 1190, 0, 108)), 0, 109);
-    fmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 25)), 0, 25);
+    fmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 35)), 0, 35);
     pmouse[0] = constrain(Math.floor(map(mouse.x, 78, 1190, 0, 108 * 7)), 0, 109 * 7);
-    pmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 25 * 9)), 0, 25 * 9);
+    pmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 35 * 9)), 0, 35 * 9);
     smouse[0] = Math.floor(pmouse[0] % 7);
     smouse[1] = Math.floor(pmouse[1] % 9);
     //scdDisplay();
@@ -45,8 +45,8 @@ drawTerminal = function(selectedProgram) {
     }
     // 
     if (ge.brushPositions && mode == 2 && showPatterns) {
-        for (let i = 0; i < patterns.length; i++) {
-            for (let y = 0; y < 18; y++) {
+        for (let i = 0; i < patterns.length-4; i++) {
+            for (let y = 0; y < (9*3); y++) {
                 let r = 7 * 5 - 2;
                  for (let x = i * r; x < r + (i * r); x++) {
                      let p = patterns[i].grid;
@@ -55,24 +55,24 @@ drawTerminal = function(selectedProgram) {
                      let sel = false;
                      let contour = false;
                      if (patterns[i] == ge.activePattern) {
-                         sel = (y==0|x==i*r|x==(r+(i*r)-1)|y==17);
+                         sel = (y==0|x==i*r|x==(r+(i*r)-1)|y==(9*3-1));
                          if (!sel) {
                              contour = (
                                  y==1||
                                  x==i*r+1||
-                                 x==i*r+2||
+                                 // x==i*r+2||
                                  x==(r+(i*r)-2)||
-                                 x==(r+(i*r)-3)||
-                                 y==16);
+                                 // x==(r+(i*r)-3)||
+                                 y==((9*3-2)));
                          }
                      }
                      if ((vv || sel) && !contour) {
-                         ge.brushPositions[23 * 9 + y][x] = 1;
+                         ge.brushPositions[(23+10-1) * 9 + y][x] = 1;
                      }
                  }
              }
          }
-        if (fmouse[1] > 19 + 3) {
+        if (fmouse[1] > 19 + 13 - 1) {
             applyPointer();
         }
     }   
@@ -93,7 +93,7 @@ drawTerminal = function(selectedProgram) {
         if (sel) {
             // ctt++;
             selections = [];
-            for (let y = 0; y < 22 + 3; y++) {
+            for (let y = 0; y < 22 + 13; y++) {
                 selections[y] = [];
                 for (let x = 0; x < 109; x++) {
                     selections[y][x] = 0;
@@ -114,7 +114,7 @@ drawTerminal = function(selectedProgram) {
         }
         if (ge.evaluated) {
             if (selections == null) {selections = []};
-            for (let y = 0; y < 22 + 3; y++) {
+            for (let y = 0; y < 22 + 13; y++) {
                 selections[y] = [];
                 for (let x = ge.evaluatedLines[2]; x < 109; x++) {
                     let sy = y + ge.activeTab.scroll.y;
@@ -133,13 +133,13 @@ drawTerminal = function(selectedProgram) {
         }
     }
     //     
-    for (let y = 0; y < Math.floor(nt / 109); y++) {
+    for (let y = 0; y < Math.floor(nt / 109)+10; y++) {
         for (let x = 0; x < 109; x++) {
             let char;
             let caret = false;
             let selection;
             let blink;
-            if (y == 21 + 3 && mode == 0) {
+            if (y == 21 + 13 && mode == 0) {
                 char = (x >= vt.text.length + 1) ? " " : (">" + vt.text)[x];
                 caret = (x == vt.caretPosition + 1);
                 let sx0 = vt.selectionBounds[0];
@@ -147,7 +147,7 @@ drawTerminal = function(selectedProgram) {
                 selection = x >= sx0 && x < sx1;
                 selection = (vt.enter && x < vt.text.length + 1) ? true : selection;
                 blink = (mode == 0);
-            } else if (y == 20 + 3 && mode == 0) {
+            } else if (y == 20 + 13 && mode == 0) {
                 // char = "-";
                 char = (x < swatchesArr.length) ? swatchesArr[x] : " ";
             } else {
@@ -168,7 +168,7 @@ drawTerminal = function(selectedProgram) {
                     char = " ";
                 }
             }
-            if (mode == 2 && y > 19 + 3) {char = " "; caret = false;};
+            if (mode == 2 && y > 19 + 13-1) {char = " "; caret = false;};
             let cur = (x == fmouse[0] && y == fmouse[1]);
             // let curP = (x == fmouse[0] && y == fmouse[1]);
             // cur = (mode == 3) ? false : cur;
@@ -182,7 +182,7 @@ drawTerminal = function(selectedProgram) {
             }
             let paint = false;
             let canvas = null;
-            if (ge.activeTab !== null && (y < 20 + 3 || mode == 1 || (mode == 2 && !showPatterns))) {
+            if (ge.activeTab !== null && (y < 20 + 13 || mode == 1 || (mode == 2 && !showPatterns))) {
                 if (ge.activeTab.canvas !== null) {
                     canvas = ge.activeTab.canvas.data;
                     if (canvas[y + ge.activeTab.scroll.y]) {
@@ -196,7 +196,7 @@ drawTerminal = function(selectedProgram) {
             //     char = " "
             //     // g = getGlyph(char);
             // };
-            if (selections !== null && (y < ((mode == 1) ? 22 + 3 : 20 + 3))) {
+            if (selections !== null && (y < ((mode == 1) ? 22 + 13 : ((mode == 2) ? 20 + 13 - 1 : 20 + 13)))) {
                 selection = (selections[y][x] && ((ge.activeTab.data[y+ge.activeTab.scroll.y]) && (x < ge.activeTab.data[y+ge.activeTab.scroll.y].length + 1))) ? true : selection;
             }
             let maxloopy = 0;
@@ -214,14 +214,15 @@ drawTerminal = function(selectedProgram) {
                         // let curPSub = (xx == smouse[0] && yy == smouse[1]);
                         // paintTest = (cur && curPSub && mode == 3) ? true : paintTest;
                         if (g[yy][xx] == test || paintTest || (brush && mode == 2)) {
-                            // let tx = 0, ty = 0;
-                            let sc = 0.8;
-                            // tx = openSimplex.noise3D((x + (xx * 1e-1)) * 0.1, (y + (yy * 1e-1)) * 0.1, drawCount * 0.5e-1) * 0.0;
-                            // ty = openSimplex.noise3D((x + (xx * 1e-1)) * 0.1, (y + (yy * 1e-1)) * 0.1, drawCount * 0.5e-1 + 1e4) * 0.0;
-                            vertices.push(((x * 7 + xx) * 0.00303 - 1.155 + nx) * sc, ((y * 9 + yy) * -0.0095 + 1.062 + ny) * sc, 11 * sc, 1);
+                            let sc = 0.58;
+                            let padding = 0.1;
+                            vertices.push(
+                                (x * 7 + xx) * 0.01 * sc - 1 - ((16/9)-1) + padding,
+                                (y * 9 + yy) * 0.01 * -sc + 1 - padding,
+                                11 * sc, 
+                                1);
                             num++;
-                            colors.push(0.65, 0.65, 0.65);   
-                            // colors.push(0.95, 0.95, 0.95);   
+                            colors.push(1, 0.1, 0.2);
                         }
                     }
                 }
@@ -317,26 +318,27 @@ roundedSquare.vertText = `
         return smoothstep(0.66, 0.33, d / thickness * 5.0);
     }
     void main(void) {
-        gl_Position = vec4(coordinates.x, coordinates.y, 0.0, 1.0);
+        gl_Position = vec4(coordinates.x * (9./16.), coordinates.y, 0.0, 1.0);
         // CRT curve
         // gl_Position.x += floor(sin(gl_Position.y * 1e2 + time)) * 0.1
         float disturbance = (floor(sin(gl_Position.y * 5. + time * 0.25 + tan(gl_Position.y * 1e3) * 0.125) * 2.)) * 0.125 * 0.125;
         float fluctuate = floor(mod(time * 1e5, 100.)/50.);
         float distr2 = (floor(sin(gl_Position.y * 1e-7 + time * 0.125 + tan(gl_Position.y * 2. + gl_Position.x * 1e-1) * 0.5) * 0.01)) * 10.1 * fluctuate;
         // distr2 *= 0.;
-        gl_Position.x += disturbance * 0.1 * disturb * (1. + distr2);
+        // gl_Position.x += disturbance * 0.1 * disturb * (1. + distr2);
+        gl_Position.y += disturbance * 0.5 * disturb * (10. + distr2);
         // gl_Position.x += tan(floor(sin(gl_Position.y * 1e3))) * 0.1;
         // gl_Position.xy *= (1.0 - distance(gl_Position.xy, vec2(0,0)) * 0.1) * 1.05;
         center = vec2(gl_Position.x, gl_Position.y);
         center = 512.0 + center * 512.0;
         myposition = vec2(gl_Position.x, gl_Position.y);
         alph = coordinates.w;
-        gl_PointSize = coordinates.z * resolution * 2.;
+        gl_PointSize = coordinates.z * resolution * 2. * 0.75;
         size = gl_PointSize;
         cols = colors;
         t = time;
-        float vig = (roundedRectangle(myposition, vec2(0.0, 0.0), vec2(1.85, 1.9) * 0.5, 0.001, 0.05));
-        gl_PointSize *= vig;
+        // float vig = (roundedRectangle(myposition, vec2(0.0, 0.0), vec2(1.85, 1.9) * 0.5, 0.001, 0.05));
+        // gl_PointSize *= vig;
         // gl_PointSize = 25.0 + cos((coordinates.x + coordinates.y) * 4000000.) * 5.;
         // gl_PointSize = coordinates.z / (alph * (sin(myposition.x * myposition.y * 1.) * 3. + 0.5));
     }
@@ -353,6 +355,9 @@ roundedSquare.fragText = `
     varying float size;
     varying vec3 cols;
     varying float t;
+    float map(float value, float min1, float max1, float min2, float max2) {
+        return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+    }
     float rand(vec2 co){
         return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * (2.0 + sin(co.x)));
     }
@@ -366,7 +371,7 @@ roundedSquare.fragText = `
         float oscScanning = (sin(gl_FragCoord.y * 1e-2 + t2) * 0.5 + 0.5) * 4.;
         // return smoothstep(2.99 + oscFull + oscScanning, 0.11, d * 10. / thickness * 5.0 * 0.125 * 1.5);
         // No oscScanning anymore.
-        return smoothstep(2.99 + oscFull + 1., 0.11, d * 10. / thickness * 5.0 * 0.125 * 1.5);
+        return smoothstep(2.99 + oscFull + 3., 0.11, d * 10. / thickness * 5.0 * 0.125 * 1.5);
      }
     float roundedRectangle (vec2 uv, vec2 pos, vec2 size, float radius, float thickness) {
         float d = length(max(abs(uv - pos), size) - size) - radius;
@@ -377,9 +382,15 @@ roundedSquare.fragText = `
          vec2 screenSize = vec2(2560.0, 1440.0) * resolution;
          vec2 uv = gl_PointCoord.xy;
         uv = uv * 2. - 1.;
-        float color = roundedRectangleFlicker(uv, vec2(0.0, 0.0), vec2(0.125, 0.35) * 0.5, 0.1, 0.5);
-        float rando = rand(uv * t) * 0.1;
-        gl_FragColor = vec4(cols, color - rando);
+        float color = roundedRectangleFlicker(uv* 0.75, vec2(0.0, 0.0), vec2(0.35, 0.35) * 0.5, 0.1, 0.5);
+        float rando = rand(uv * t) * 0.05;
+        float t2 = mod(t * 0.125, 3.14159 * 2.) * 1.;
+        // float oscFull = (sin(t2) * 0.5 + 0.5) * 3.75 * 0.;
+        float oscScanning = map(sin(gl_FragCoord.y * 1e-2 + t2), -1., 1., 0.5, 0.);
+        // float thickness = 0.001;
+        // float os = smoothstep(2.99 + oscFull + oscScanning, 1., thickness * 5.0 * 0.125 * 1.5);
+        
+        gl_FragColor = vec4(cols, (color - rando) - oscScanning);
     }
     // endGLSL
 `;
@@ -549,8 +560,8 @@ getGlyph = function(g) {
         ch = [
             "0110000",
             "0010000",
-            "0010000",
             "0011100",
+            "0010010",
             "0010010",
             "0010010",
             "0011100",
@@ -588,8 +599,8 @@ getGlyph = function(g) {
         ch = [
             "0001100",
             "0000100",
-            "0000100",
             "0011100",
+            "0100100",
             "0100100",
             "0100100",
             "0011010",
@@ -703,21 +714,20 @@ getGlyph = function(g) {
         ch = [
             "0110000",
             "0010000",
-            "0010000",
             "0011100",
             "0010010",
             "0010010",
-            "0110010",
-            "0000000",
+            "0010010",
+            "0110011",
             "0000000",
         ];
         break;
         case "i":
         ch = [
-            "0000000",
             "0001000",
             "0000000",
             "0011000",
+            "0001000",
             "0001000",
             "0001000",
             "0011100",
@@ -794,11 +804,11 @@ getGlyph = function(g) {
         ch = [
             "0000000",
             "0000000",
-            "0110110",
+            "1111100",
             "0101010",
             "0101010",
-            "0100010",
-            "0100010",
+            "0101010",
+            "1101011",
             "0000000",
             "0000000",
         ];
@@ -849,10 +859,10 @@ getGlyph = function(g) {
             "0111100",
             "0010010",
             "0010010",
+            "0010010",
             "0011100",
             "0010000",
             "0111000",
-            "0000000",
         ];
         break;
         case "q":
@@ -898,7 +908,7 @@ getGlyph = function(g) {
         ch = [
             "0010000",
             "0010000",
-            "0111000",
+            "0111100",
             "0010000",
             "0010000",
             "0010010",
@@ -911,11 +921,11 @@ getGlyph = function(g) {
         ch = [
             "0000000",
             "0000000",
-            "0100010",
-            "0100010",
-            "0100010",
-            "0100010",
-            "0011101",
+            "0100100",
+            "0100100",
+            "0100100",
+            "0100100",
+            "0011010",
             "0000000",
             "0000000",
         ];
@@ -1004,11 +1014,11 @@ getGlyph = function(g) {
             "0000000",
             "0100010",
             "0100010",
+            "0100010",
             "0011110",
             "0000010",
-            "0000010",
-            "0001100",
-            "0000000",
+            "0100010",
+            "0011100",
         ];
         break;
         case "z":
@@ -3281,7 +3291,7 @@ downmouse = function(e) {
     // console.log(e);
     if (mode == 1) {
         let t = ge.activeTab;
-        if (grimoire && fmouse[1] < 25) {
+        if (grimoire && fmouse[1] < 35) {
             let caret = false;
             let caretAt;
             for (let i = 0; i < t.carets.length; i++) {
@@ -3314,7 +3324,7 @@ downmouse = function(e) {
         let t = ge.activeTab;
         if (t !== null) {
             if (!e.shiftKey) {
-                if (grimoire && fmouse[1] < 23) {
+                if (grimoire && fmouse[1] < (23+10-1)) {
                     let y = t.data[fmouse[1] + t.scroll.y];
                     let add = pchar;
                     if (y.length < fmouse[0]) {
@@ -3342,16 +3352,16 @@ downmouse = function(e) {
                         }
                     }
                     t.data[fmouse[1] + t.scroll.y] = y.substring(0, fmouse[0]) + add + y.substr(fmouse[0] + pchar.length);
-                } else if (fmouse[1] == 23) {
+                } else if (fmouse[1] == (23+10)) {
                     pchar = swatchesArr[fmouse[0]];
                 }
             } else {
                 // console.log(face[fmouse[1]][fmouse[0]]);
                 // console.log(swatchesArr[fmouse[0]]);
                 let newChar;
-                if (fmouse[1] == 23) {
+                if (fmouse[1] == (23+10)) {
                     newChar = swatchesArr[fmouse[0]];
-                } else if (fmouse[1] == 24) {
+                } else if (fmouse[1] == (24+10)) {
                     if (fmouse[0] < vt.text.length + 2) {
                         newChar = vt.text[fmouse[0] - 2];
                     } else {
@@ -3368,14 +3378,14 @@ downmouse = function(e) {
             }
         }
         if (e.altKey) {
-            if (fmouse[1] == 23) {
+            if (fmouse[1] == (23+10)) {
                 vt.update({key: swatchesArr[fmouse[0]]});
             }
         }
     }
     if (mode == 2) {
         
-        if (fmouse[1] >= 23 && showPatterns) {
+        if (fmouse[1] >= (23+10-1) && showPatterns) {
             // ge.activePattern = patterns[Math.floor(fmouse[0] / 5)]; 
             ge.activePattern = patterns[Math.floor(pmouse[0] / (7*5-2))]; 
             resetBrushPositions();
@@ -3400,7 +3410,7 @@ mouseDragged = function(e) {
         }]);
     }
     if (mode == 0) {
-        if (grimoire && fmouse[1] < 23) {
+        if (grimoire && fmouse[1] < (23+10)) {
             let t = ge.activeTab;
             if (t !== null) {
                 let y = t.data[fmouse[1] + t.scroll.y];
@@ -3433,7 +3443,7 @@ mouseDragged = function(e) {
             }
         }
     }
-    let yPaintMax = (showPatterns) ? 23 : 25;
+    let yPaintMax = (showPatterns) ? (23+10) : (25+10);
     if (mode == 2 && fmouse[1] < yPaintMax) {
         let val = (e.shiftKey) ? 0 : 1;
         // paint(fmouse[0], fmouse[1], smouse[0], smouse[1], val);
@@ -3441,7 +3451,7 @@ mouseDragged = function(e) {
     }
     if (mode == 1) {
         let t = ge.activeTab;
-        if (fmouse[1] == 24 && (drawCount % 2 == 0)) {
+        if (fmouse[1] == (24+10) && (drawCount % 2 == 0)) {
             t.moveCaretsY(1, true);
         } else if (fmouse[1] == 0 && (drawCount % 2 == 0)) {
             t.moveCaretsY(-1, true);
@@ -3554,7 +3564,7 @@ paintUnitSubtract = function(fx, fy, sx, sy, val = 1) {
 
 
 paint = function(val = 1) {
-    let pat = (showPatterns) ? 2 : 0;
+    let pat = (showPatterns) ? 3 : 0;
     for (let y = 0; y < ge.brushPositions.length - (pat * 9); y++) {
         for (let x = 0; x < ge.brushPositions[y].length; x++) {
             let r = (brushRandom) ? Math.round(Math.random()) : true;
