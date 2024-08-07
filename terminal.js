@@ -823,12 +823,13 @@ getGlyph = function(g) {
         ch = [
             "0110000",
             "0010000",
-            "0011100",
+            "0010100",
+            "0011010",
             "0010010",
             "0010010",
-            "0010010",
-            "0110011",
+            "0110111",
             "0000000",
+            "0000000"
         ];
         break;
         case "i":
@@ -917,7 +918,7 @@ getGlyph = function(g) {
             "0101010",
             "0101010",
             "0101010",
-            "1101011",
+            "1111111",
             "0000000",
             "0000000",
         ];
@@ -1099,6 +1100,17 @@ getGlyph = function(g) {
             "0100010",
             "0101010",
             "0111110",
+            "0010100",
+            "0000000",
+            "0000000",
+        ];
+        ch = [
+            "0000000",
+            "0000000",
+            "1111111",
+            "0101010",
+            "0101010",
+            "0101010",
             "0010100",
             "0000000",
             "0000000",
@@ -1458,7 +1470,7 @@ getGlyph = function(g) {
         case "F":
         ch = [
             "0111110",
-            "0010000",
+            "0010010",
             "0010000",
             "0011100",
             "0010000",
@@ -3199,19 +3211,32 @@ VirtualTerminal.prototype.update = function(e) {
             this.commandID = this.commands.length - 1;
         }
         this.enter = 5;
-        var scTest = /(^s\s|^l\s)([\s\S]*)/;
-        var scMatch = scTest.exec(this.text);
-        if (scMatch) {
-            socket.emit('interpretSuperCollider', scMatch[2], "./");
+        if (this.text[0]==">") {
+            function sWArr(msg) {swatchesArr = "" + msg}
+            eval(`sWArr(${this.text.substr(1)})`);
+        } else if (this.text == "h") { 
+          hide();
+        } else if (this.text == "cc") { 
+          cc();
         } else {
-            let spell = grimoireSpell(this.text);
-            if (spell == false) {
-                eval(this.text);
+            var scTest = /(^s\s|^l\s)([\s\S]*)/;
+            var scMatch = scTest.exec(this.text);
+            if (scMatch) {
+                socket.emit('interpretSuperCollider', scMatch[2], "./");
+            } else {
+                let spell = grimoireSpell(this.text);
+                if (spell == false) {
+                    eval(this.text);
+                }
             }
         }
     }
     this.makeTerminalString();
 };
+
+cc = function() {
+    swatchesArr = "";
+}
 
 VirtualTerminal.prototype.add = function(t) {
     this.commands.push(t);

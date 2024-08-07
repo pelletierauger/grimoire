@@ -371,7 +371,7 @@ io.sockets.on('connection', function(socket) {
                 value: data
             }]
         };
-        // console.log("Sending message", msg.address, msg.args, "to", udpPort.options.remoteAddress + ":" + udpPort.options.remotePort);
+        console.log("Sending message", msg.address, msg.args, "to", udpPort.options.remoteAddress + ":" + udpPort.options.remotePort);
         udpPort.send(msg);
     });
     socket.on('msgToSCD', function(msg) {

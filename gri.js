@@ -22,6 +22,7 @@ fileNameSplit = function(s) {
 tab = function(s, y) {
     if (s == null) {
         ge.activeTab = null;
+        ge.t = null;
         mode = 0;
         return;
     }
@@ -108,6 +109,17 @@ tb = function(s) {
         mode = 1;
     }
     return t;
+};
+
+hide = function() {
+    if (ge.t) {
+        hiddenTab = ge.t.name;
+        ge.activeTab = null;
+        ge.t = null;
+        mode = 0;
+    } else {
+        tab(hiddenTab);
+    }
 };
 
 let GrimoireEditor = function() {
