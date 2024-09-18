@@ -14,6 +14,11 @@ glitchDist = 0;
 
 showPatterns = true;
 
+function clearSelection() {
+    if (window.getSelection) {window.getSelection().removeAllRanges();}
+    else if (document.selection) {document.selection.empty();}
+}
+
 fileNameSplit = function(s) {
     let re = /(?:\.([^.]+))?$/;
     let e = re.exec(s);
