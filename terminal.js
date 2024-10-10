@@ -1,4 +1,7 @@
 drawTerminal = function(selectedProgram) {
+    gl.useProgram(selectedProgram);
+    time = gl.getUniformLocation(selectedProgram, "time"); 
+    disturb = gl.getUniformLocation(selectedProgram, "disturb"); 
     // let canH = cnvs.height / resolutionScalar / 2;
     // let hh = (window.innerHeight - canH) * 0.5;
     // let mx = map(mouse.x, 0, document.body.clientWidth, -1, 1);
