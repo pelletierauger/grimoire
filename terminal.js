@@ -3485,8 +3485,8 @@ VirtualTerminal.prototype.update = function(e) {
             hide();
         } else if (this.text == "cc") { 
             cc();
-        } else if (this.text[0] === "d" && !parseInt(this.text[1]).isNaN) {
-            drawCount = this.text.substring(1, this.text.length);
+        } else if (this.text[0] === "d" && Number.isInteger(parseInt(this.text.substring(1, this.text.length)))) {
+            drawCount = parseInt(this.text.substring(1, this.text.length));
         } else if (this.text === "l") {
             tl();
         } else {
