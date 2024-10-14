@@ -3482,9 +3482,13 @@ VirtualTerminal.prototype.update = function(e) {
             function sWArr(msg) {swatchesArr = "" + msg}
             eval(`sWArr(${this.text.substr(1)})`);
         } else if (this.text == "h") { 
-          hide();
+            hide();
         } else if (this.text == "cc") { 
-          cc();
+            cc();
+        } else if (this.text[0] === "d" && !parseInt(this.text[1]).isNaN) {
+            drawCount = this.text.substring(1, this.text.length);
+        } else if (this.text === "l") {
+            tl();
         } else {
             var scTest = /(^s\s|^l\s)([\s\S]*)/;
             var scMatch = scTest.exec(this.text);
