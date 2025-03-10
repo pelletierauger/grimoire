@@ -239,6 +239,7 @@ function init() {
                 });
                 ge.files.scd.push(new GrimoireTab({
                     name: d.name,
+                    path: d.path,
                     lang: "scd",
                     scroll: {x: 0, y: 0},
                     carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],
@@ -258,6 +259,7 @@ function init() {
                 });
                 ge.files.js.push(new GrimoireTab({
                     name: d.name,
+                    path: d.path,
                     lang: "js",
                     scroll: {x: 0, y: 0},
                     carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],

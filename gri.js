@@ -67,6 +67,7 @@ tab = function(s, y) {
             }
             return ge.t;
         } else {
+            nt = -1000;
             ge.activeTab = ge.tabs[match];
             ge.t = ge.activeTab;
             if (ge.activeTab.canvas == null) {
@@ -124,6 +125,7 @@ hide = function() {
         ge.t = null;
         mode = 0;
     } else {
+        nt=-1000;
         tab(hiddenTab);
     }
 };
@@ -426,6 +428,7 @@ newTab = function(name, lang) {
 
 let GrimoireTab = function(o) {
     this.name = o.name,
+    this.path = o.path;
     this.lang = o.lang;
     this.scroll = o.scroll;
     this.carets = o.carets;
@@ -796,7 +799,7 @@ GrimoireTab.prototype.evaluateLine = function() {
     let spell = grimoireSpell(line);
     if (spell == false) {
         if (t.lang == "scd") {
-            socket.emit('interpretSuperCollider', line, t.canvasPath);
+            socket.emit('interpretSuperCollider', line, t.path);
         } else if (t.lang == "js") {
             eval(line);
         }
@@ -830,7 +833,7 @@ GrimoireTab.prototype.evaluateBlock = function() {
                     t.data[i].replace(/^\s*/,function(a){firstX = Math.min(firstX, a.length)});
                     block += t.data[i] + "\n";
                 }
-                socket.emit('interpretSuperCollider', block, t.canvasPath);
+                socket.emit('interpretSuperCollider', block, t.path);
                 ge.evaluated = 5;
                 ge.evaluatedLines = [up, down, firstX];
             }
@@ -1227,7 +1230,7 @@ GrimoireEditor.prototype.update = function(e) {
             updated = false;
         } else if (s == "." && modifier) {
             // if (t.lang == "scd") {
-                socket.emit('interpretSuperCollider', 'CmdPeriod.run;', t.canvasPath)
+                socket.emit('interpretSuperCollider', 'CmdPeriod.run;', t.path)
             // }
             updated = false;
         } else if (s == "Enter") {
