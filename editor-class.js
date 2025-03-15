@@ -177,7 +177,7 @@ EditorClass.prototype.eval = function(arg, callback) {
         // self.log(jsString);
         logJavaScriptConsole(jsString);
         jsLog.unshift(jsString);
-        if (autoRedraw && !looping) {
+        if (autoRedraw && !envirLooping) {
             drawCount--;
             redraw();
         }
