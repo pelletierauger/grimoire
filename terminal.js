@@ -10,6 +10,9 @@ drawTerminal = function(selectedProgram) {
     let ny = openSimplex.noise2D(0, drawCount * 5e-2 + 1e5) * 0.0025;
     if (ge.playback) {
         ge.play();
+    }    
+    if (ge.playbackGhost) {
+        ge.playGhost();
     }
     fmouse[0] = constrain(Math.floor(map(mouse.x, 78, 1190, 0, 108)), 0, 109);
     fmouse[1] = constrain(Math.floor(map(mouse.y, 96, 695, 0, 35)), 0, 35);
@@ -3711,29 +3714,31 @@ files["js"][0].data.replace(/(ansi = `)([^`]*)(`)/g, function(a, b, c, d, e) {
 mouse = {x: 0, y: 0};
 
 movemouse = function(e) {
-    if (ge.recording) {
-        ge.recordingSession.push([drawCount, {
-            name: "mousemove",
-            altKey: e.altKey,
-            metaKey: e.metaKey,
-            shiftKey: e.shiftKey,
-            clientX: e.clientX,
-            clientY: e.clientY
-        }]);
-    }
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-    if (mode == 2 && ge.activeTab !== null) {
-        resetBrushPositions();
-        if (e.altKey) {
-            if (e.shiftKey) {
-                if (eraserMode)  {
-                    erase(0);
+    if (grimoire) {
+        if (ge.recording) {
+            ge.recordingSession.push([drawCount, {
+                name: "mousemove",
+                altKey: e.altKey,
+                metaKey: e.metaKey,
+                shiftKey: e.shiftKey,
+                clientX: e.clientX,
+                clientY: e.clientY
+            }]);
+        }
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        if (mode == 2 && ge.activeTab !== null) {
+            resetBrushPositions();
+            if (e.altKey) {
+                if (e.shiftKey) {
+                    if (eraserMode)  {
+                        erase(0);
+                    } else {
+                        paint(0);
+                    }
                 } else {
-                    paint(0);
+                    paint(1);
                 }
-            } else {
-                paint(1);
             }
         }
     }
@@ -3768,190 +3773,194 @@ pchar = "↨";
 // mouseClicked = function(e) {
     // editing
 downmouse = function(e) {
-    if (ge.recording) {
-        ge.recordingSession.push([drawCount, {
-            name: "downmouse",
-            altKey: e.altKey,
-            metaKey: e.metaKey,
-            shiftKey: e.shiftKey
-        }]);
-    }
-    // console.log(e);
-    if (mode == 1) {
-        let t = ge.activeTab;
-        if (grimoire && fmouse[1] < 35) {
-            let caret = false;
-            let caretAt;
-            for (let i = 0; i < t.carets.length; i++) {
-                let c = t.carets[i];
-                if (c.x == fmouse[0] && c.y == fmouse[1] + t.scroll.y) {
-                    caret = true;
-                    caretAt = i;
-                }
-            }
-            if (caret && e.metaKey) {
-                t.carets.splice(caretAt, 1)
-            } else if (!caret) {
-                if (!e.metaKey) {
-                    t.carets = [];
-                }
-                if ((fmouse[1] + t.scroll.y) < t.data.length) {
-                    let x = Math.min(t.data[fmouse[1] + t.scroll.y].length, fmouse[0]);
-                    t.carets.push({x: x, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: null});
-                } else {
-                    while (t.data.length < (fmouse[1] + t.scroll.y + 1)) {
-                        t.data.push("");
+    if (grimoire) {
+        if (ge.recording) {
+            ge.recordingSession.push([drawCount, {
+                name: "downmouse",
+                altKey: e.altKey,
+                metaKey: e.metaKey,
+                shiftKey: e.shiftKey
+            }]);
+        }
+        // console.log(e);
+        if (mode == 1) {
+            let t = ge.activeTab;
+            if (grimoire && fmouse[1] < 35) {
+                let caret = false;
+                let caretAt;
+                for (let i = 0; i < t.carets.length; i++) {
+                    let c = t.carets[i];
+                    if (c.x == fmouse[0] && c.y == fmouse[1] + t.scroll.y) {
+                        caret = true;
+                        caretAt = i;
                     }
-                    t.carets.push({x: 0, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: null});
+                }
+                if (caret && e.metaKey) {
+                    t.carets.splice(caretAt, 1)
+                } else if (!caret) {
+                    if (!e.metaKey) {
+                        t.carets = [];
+                    }
+                    if ((fmouse[1] + t.scroll.y) < t.data.length) {
+                        let x = Math.min(t.data[fmouse[1] + t.scroll.y].length, fmouse[0]);
+                        t.carets.push({x: x, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: null, ghost: false});
+                    } else {
+                        while (t.data.length < (fmouse[1] + t.scroll.y + 1)) {
+                            t.data.push("");
+                        }
+                        t.carets.push({x: 0, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: null, ghost: false});
+                    }
                 }
             }
         }
-    }
-    //  drawing
-    if (mode == 0) {
-        let t = ge.activeTab;
-        if (t !== null) {
-            if (!e.shiftKey) {
-                if (grimoire && fmouse[1] < (23+10-1)) {
-                    let y = t.data[fmouse[1] + t.scroll.y];
-                    let add = pchar;
-                    if (y.length < fmouse[0]) {
-                        let n = fmouse[0] - y.length;
-                        for (let i = 0; i < n; i++) {add = " " + add};
+        //  drawing
+        if (mode == 0) {
+            let t = ge.activeTab;
+            if (t !== null) {
+                if (!e.shiftKey) {
+                    if (grimoire && fmouse[1] < (23+10-1)) {
+                        let y = t.data[fmouse[1] + t.scroll.y];
+                        let add = pchar;
+                        if (y.length < fmouse[0]) {
+                            let n = fmouse[0] - y.length;
+                            for (let i = 0; i < n; i++) {add = " " + add};
+                        }
+                        if (!t.attachedHeadState) {
+                            t.history.length = t.historyIndex;
+                            t.historyIndex = t.history.length;
+                            t.attachedHeadState = true;
+                        }
+                        let updateDate = new Date();
+                        if (t.lastEdited == null) {
+                                t.logHistory(t.prepareHistoryState());
+                                t.historyIndex++;
+                                t.lastEdited = updateDate;
+                                t.headState = t.prepareHistoryState();
+                        } else {
+                            let editDelta = updateDate.getTime() - t.lastEdited.getTime();
+                            if (editDelta > 3000 && t.data[fmouse[1]][fmouse[0]] !== pchar) {
+                                t.logHistory(t.prepareHistoryState());
+                                t.historyIndex++;
+                                t.lastEdited = updateDate;
+                                t.headState = t.prepareHistoryState();
+                            }
+                        }
+                        t.data[fmouse[1] + t.scroll.y] = y.substring(0, fmouse[0]) + add + y.substr(fmouse[0] + pchar.length);
+                    } else if (fmouse[1] == (23+10)) {
+                        pchar = swatchesArr[fmouse[0]];
                     }
-                    if (!t.attachedHeadState) {
-                        t.history.length = t.historyIndex;
-                        t.historyIndex = t.history.length;
-                        t.attachedHeadState = true;
-                    }
-                    let updateDate = new Date();
-                    if (t.lastEdited == null) {
-                            t.logHistory(t.prepareHistoryState());
-                            t.historyIndex++;
-                            t.lastEdited = updateDate;
-                            t.headState = t.prepareHistoryState();
+                } else {
+                    // console.log(face[fmouse[1]][fmouse[0]]);
+                    // console.log(swatchesArr[fmouse[0]]);
+                    let newChar;
+                    if (fmouse[1] == (23+10)) {
+                        newChar = swatchesArr[fmouse[0]];
+                    } else if (fmouse[1] == (24+10)) {
+                        if (fmouse[0] < vt.text.length + 2) {
+                            newChar = vt.text[fmouse[0] - 2];
+                        } else {
+                            newChar = " ";
+                        }
                     } else {
-                        let editDelta = updateDate.getTime() - t.lastEdited.getTime();
-                        if (editDelta > 3000 && t.data[fmouse[1]][fmouse[0]] !== pchar) {
-                            t.logHistory(t.prepareHistoryState());
-                            t.historyIndex++;
-                            t.lastEdited = updateDate;
-                            t.headState = t.prepareHistoryState();
+                        if (fmouse[0] > t.data[fmouse[1] + t.scroll.y].length) {
+                            newChar = " ";
+                        } else {
+                            newChar = t.data[fmouse[1] + t.scroll.y][fmouse[0]];
                         }
                     }
-                    t.data[fmouse[1] + t.scroll.y] = y.substring(0, fmouse[0]) + add + y.substr(fmouse[0] + pchar.length);
-                } else if (fmouse[1] == (23+10)) {
-                    pchar = swatchesArr[fmouse[0]];
+                    pchar = newChar;
                 }
-            } else {
-                // console.log(face[fmouse[1]][fmouse[0]]);
-                // console.log(swatchesArr[fmouse[0]]);
-                let newChar;
+            }
+            if (e.altKey) {
                 if (fmouse[1] == (23+10)) {
-                    newChar = swatchesArr[fmouse[0]];
-                } else if (fmouse[1] == (24+10)) {
-                    if (fmouse[0] < vt.text.length + 2) {
-                        newChar = vt.text[fmouse[0] - 2];
-                    } else {
-                        newChar = " ";
-                    }
-                } else {
-                    if (fmouse[0] > t.data[fmouse[1] + t.scroll.y].length) {
-                        newChar = " ";
-                    } else {
-                        newChar = t.data[fmouse[1] + t.scroll.y][fmouse[0]];
-                    }
+                    vt.update({key: swatchesArr[fmouse[0]]});
                 }
-                pchar = newChar;
             }
         }
-        if (e.altKey) {
-            if (fmouse[1] == (23+10)) {
-                vt.update({key: swatchesArr[fmouse[0]]});
+        if (mode == 2) {
+
+            if (fmouse[1] >= (23+10-1) && showPatterns) {
+                // ge.activePattern = patterns[Math.floor(fmouse[0] / 5)]; 
+                ge.activePattern = patterns[Math.floor(pmouse[0] / (7*5-2))]; 
+                resetBrushPositions();
             }
-        }
-    }
-    if (mode == 2) {
-        
-        if (fmouse[1] >= (23+10-1) && showPatterns) {
-            // ge.activePattern = patterns[Math.floor(fmouse[0] / 5)]; 
-            ge.activePattern = patterns[Math.floor(pmouse[0] / (7*5-2))]; 
-            resetBrushPositions();
-        }
-        else {
-            let val = (e.shiftKey) ? 0 : 1;
-            // paint(fmouse[0], fmouse[1], smouse[0], smouse[1], val);
-            paint(val);
-            
+            else {
+                let val = (e.shiftKey) ? 0 : 1;
+                // paint(fmouse[0], fmouse[1], smouse[0], smouse[1], val);
+                paint(val);
+
+            }
         }
     }
 };
 window.addEventListener('mousedown', downmouse);
 
 mouseDragged = function(e) {
-   if (ge.recording) {
-        ge.recordingSession.push([drawCount, {
-            name: "dragmouse",
-            altKey: e.altKey,
-            metaKey: e.metaKey,
-            shiftKey: e.shiftKey
-        }]);
-    }
-    if (mode == 0) {
-        if (grimoire && fmouse[1] < (23+10)) {
-            let t = ge.activeTab;
-            if (t !== null) {
-                let y = t.data[fmouse[1] + t.scroll.y];
-                let add = pchar;
-                if (y.length < fmouse[0]) {
-                    let n = fmouse[0] - y.length;
-                    for (let i = 0; i < n; i++) {add = " " + add};
-                }
-                    if (!t.attachedHeadState) {
-                        t.history.length = t.historyIndex;
-                        t.historyIndex = t.history.length;
-                        t.attachedHeadState = true;
+    if (grimoire) {
+        if (ge.recording) {
+            ge.recordingSession.push([drawCount, {
+                name: "dragmouse",
+                altKey: e.altKey,
+                metaKey: e.metaKey,
+                shiftKey: e.shiftKey
+            }]);
+        }
+        if (mode == 0) {
+            if (grimoire && fmouse[1] < (23+10)) {
+                let t = ge.activeTab;
+                if (t !== null) {
+                    let y = t.data[fmouse[1] + t.scroll.y];
+                    let add = pchar;
+                    if (y.length < fmouse[0]) {
+                        let n = fmouse[0] - y.length;
+                        for (let i = 0; i < n; i++) {add = " " + add};
                     }
-                    let updateDate = new Date();
-                    if (t.lastEdited == null) {
-                            t.logHistory(t.prepareHistoryState());
-                            t.historyIndex++;
-                            t.lastEdited = updateDate;
-                            t.headState = t.prepareHistoryState();
-                    } else {
-                        let editDelta = updateDate.getTime() - t.lastEdited.getTime();
-                        if (editDelta > 3000 && t.data[fmouse[1]][fmouse[0]] !== pchar) {
-                            t.logHistory(t.prepareHistoryState());
-                            t.historyIndex++;
-                            t.lastEdited = updateDate;
-                            t.headState = t.prepareHistoryState();
+                        if (!t.attachedHeadState) {
+                            t.history.length = t.historyIndex;
+                            t.historyIndex = t.history.length;
+                            t.attachedHeadState = true;
                         }
-                    }
-                    t.data[fmouse[1] + t.scroll.y] = y.substring(0, fmouse[0]) + add + y.substr(fmouse[0] + pchar.length);
+                        let updateDate = new Date();
+                        if (t.lastEdited == null) {
+                                t.logHistory(t.prepareHistoryState());
+                                t.historyIndex++;
+                                t.lastEdited = updateDate;
+                                t.headState = t.prepareHistoryState();
+                        } else {
+                            let editDelta = updateDate.getTime() - t.lastEdited.getTime();
+                            if (editDelta > 3000 && t.data[fmouse[1]][fmouse[0]] !== pchar) {
+                                t.logHistory(t.prepareHistoryState());
+                                t.historyIndex++;
+                                t.lastEdited = updateDate;
+                                t.headState = t.prepareHistoryState();
+                            }
+                        }
+                        t.data[fmouse[1] + t.scroll.y] = y.substring(0, fmouse[0]) + add + y.substr(fmouse[0] + pchar.length);
+                }
             }
         }
-    }
-    let yPaintMax = (showPatterns) ? (23+10) : (25+10);
-    if (mode == 2 && fmouse[1] < yPaintMax) {
-        let val = (e.shiftKey) ? 0 : 1;
-        // paint(fmouse[0], fmouse[1], smouse[0], smouse[1], val);
-        paint(val);
-    }
-    if (mode == 1) {
-        let t = ge.activeTab;
-        if (fmouse[1] == (24+10) && (drawCount % 2 == 0)) {
-            t.moveCaretsY(1, true);
-        } else if (fmouse[1] == 0 && (drawCount % 2 == 0)) {
-            t.moveCaretsY(-1, true);
+        let yPaintMax = (showPatterns) ? (23+10) : (25+10);
+        if (mode == 2 && fmouse[1] < yPaintMax) {
+            let val = (e.shiftKey) ? 0 : 1;
+            // paint(fmouse[0], fmouse[1], smouse[0], smouse[1], val);
+            paint(val);
         }
-        if (t.carets[0].sel == null) {
-            t.carets[0].sel = [t.carets[0].x, t.carets[0].y];
+        if (mode == 1) {
+            let t = ge.activeTab;
+            if (fmouse[1] == (24+10) && (drawCount % 2 == 0)) {
+                t.moveCaretsY(1, true);
+            } else if (fmouse[1] == 0 && (drawCount % 2 == 0)) {
+                t.moveCaretsY(-1, true);
+            }
+            if (t.carets[0].sel == null) {
+                t.carets[0].sel = [t.carets[0].x, t.carets[0].y];
+            }
+            // t.carets = [];
+            let x = Math.min(t.data[fmouse[1] + t.scroll.y].length, fmouse[0]);
+            t.carets[0].x = x;
+            t.carets[0].y = fmouse[1] + t.scroll.y;
+                // .push({x: x, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: [x, fmouse[1] + t.scroll.y]});
         }
-        // t.carets = [];
-        let x = Math.min(t.data[fmouse[1] + t.scroll.y].length, fmouse[0]);
-        t.carets[0].x = x;
-        t.carets[0].y = fmouse[1] + t.scroll.y;
-            // .push({x: x, y: fmouse[1] + t.scroll.y, dir: 0, curXRef: 0, sel: [x, fmouse[1] + t.scroll.y]});
     }
 };
 

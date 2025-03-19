@@ -242,7 +242,7 @@ function init() {
                     path: d.path,
                     lang: "scd",
                     scroll: {x: 0, y: 0},
-                    carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],
+                    carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null, ghost: false}],
                     data: d.data.split("\n"),
                     canvasData: ((data.scd[i].canvasData == null) ? null : data.scd[i].canvasData),
                     canvasPath: data.scd[i].canvasPath
@@ -262,7 +262,7 @@ function init() {
                     path: d.path,
                     lang: "js",
                     scroll: {x: 0, y: 0},
-                    carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null}],
+                    carets: [{x: 0, y: 0, dir: 0, curXRef: 0, sel: null, ghost: false}],
                     data: d.data.split("\n"),
                     canvasData: ((data.js[i].canvasData == null) ? null : data.js[i].canvasData),
                     canvasPath: data.js[i].canvasPath

@@ -63,13 +63,19 @@ tab = function(s, y) {
                 }
                 ge.t.scroll.y = y;
                 ge.t.carets = [];
-                ge.t.carets.push({x: ge.t.data[y].length, y: y, dir: 0, curXRef: 0, sel: null});
+                ge.t.carets.push({x: ge.t.data[y].length, y: y, dir: 0, curXRef: 0, sel: null, ghost: false});
             }
+            // draw = ge.t.draw;
+            // ge.t.open();
             return ge.t;
         } else {
             nt = -1000;
+            if (ge.activeTab) {
+               ge.t.close(); 
+            }
             ge.activeTab = ge.tabs[match];
             ge.t = ge.activeTab;
+            ge.t.open();
             if (ge.activeTab.canvas == null) {
                 ge.activeTab.canvas = new GrimoireCanvas();
             }
@@ -89,8 +95,9 @@ tab = function(s, y) {
                 }
                 ge.t.scroll.y = y;
                 ge.t.carets = [];
-                ge.t.carets.push({x: ge.t.data[y].length, y: y, dir: 0, curXRef: 0, sel: null});
+                ge.t.carets.push({x: ge.t.data[y].length, y: y, dir: 0, curXRef: 0, sel: null, ghost: false});
             }
+            // draw = ge.t.draw;
             return ge.t;
         }
     } else {
@@ -187,12 +194,24 @@ GrimoireEditor.prototype.record = function() {
     vt.clear();
 };
 
+GrimoireEditor.prototype.recordGhost = function() {
+    // this.recordingFrame = 0;
+    drawCount = 0;
+    this.ghostRecordingSession = [];
+    this.ghostRecordingSession.push([ge.t.name, ge.t.carets[0].x, ge.t.carets[0].y]);
+    this.ghostRecording = true;
+};
+
 GrimoireEditor.prototype.r = function() {
     this.record();
 };
 
 GrimoireEditor.prototype.stopRecord = function() {
     this.recording = false;
+};
+
+GrimoireEditor.prototype.stopRecordGhost = function() {
+    this.ghostRecording = false;
 };
 
 GrimoireEditor.prototype.sr = function() {
@@ -203,6 +222,16 @@ GrimoireEditor.prototype.startPlayback = function() {
     this.playback = true;
     drawCount = 0;
     vt.clear();
+};
+
+GrimoireEditor.prototype.startPlaybackGhost = function() {
+    this.playbackGhost = true;
+    this.ghostCount = 0;
+    let t = ge.getTab(this.ghostRecordingSession[0][0]);
+    let x = ge.ghostRecordingSession[0][1];
+    let y = ge.ghostRecordingSession[0][2];
+    t.carets.push({x: x, y: y, dir: 0, curXRef: 0, sel: null, ghost: true});
+    // vt.clear();
 };
 
 GrimoireEditor.prototype.p = function() {
@@ -233,8 +262,30 @@ GrimoireEditor.prototype.play = function() {
     };
 };
 
+GrimoireEditor.prototype.playGhost = function() {
+    for (let i = 1; i < this.ghostRecordingSession.length; i++) {
+        let e = this.ghostRecordingSession[i];
+        if (this.ghostCount == e[0]) {
+            if (e[1].name == "keyDown") {
+                // keyDownGhost(e[1], true);
+                this.update(e[1], true);
+            }
+        }
+    }
+    let l = this.ghostRecordingSession.length - 1;
+    let last = this.ghostRecordingSession[l][0];
+    if (this.ghostCount > last) {
+        this.stopPlaybackGhost();
+    };
+    this.ghostCount++;
+};
+
 GrimoireEditor.prototype.stopPlayback = function() {
     this.playback = false;
+};
+
+GrimoireEditor.prototype.stopPlaybackGhost = function() {
+    this.playbackGhost = false;
 };
 
 GrimoireEditor.prototype.sp = function() {
@@ -445,6 +496,7 @@ let GrimoireTab = function(o) {
     this.headState = null;
     this.attachedHeadState = true;
     this.highlights = [];
+    this.drawCount = 0;
     ge.tabs.push(this);
 };
 
@@ -454,6 +506,10 @@ GrimoireTab.prototype.clear = function() {
         t[i] = "";
     }
 };
+
+GrimoireTab.prototype.open = function() {};
+
+GrimoireTab.prototype.close = function() {};
 
 GrimoireTab.prototype.saveCanvas = function() {
     let data = "";
@@ -598,7 +654,7 @@ GrimoireTab.prototype.prepareHistoryState = function() {
     let carets = [];
     for (let i = 0; i < this.carets.length; i++) {
         let c = this.carets[i]
-        carets.push({x: c.x, y: c.y, dir: c.dir, curXRef: c.curXRef, sel: c.sel});
+        carets.push({x: c.x, y: c.y, dir: c.dir, curXRef: c.curXRef, sel: c.sel, ghost: c.ghost});
     }
     let scroll = {x: this.scroll.x, y: this.scroll.y};
     return {scroll: scroll, carets: carets, data: data};
@@ -608,13 +664,15 @@ GrimoireTab.prototype.logHistory = function(h) {
     this.history.push(h);
 };
 
-GrimoireTab.prototype.moveCaretsX = function(x, sel = false) {
+GrimoireTab.prototype.moveCaretsX = function(x, sel = false, ghost = false) {
     let t = this;
     for (let i = 0; i < t.carets.length; i++) {
+        if (ghost !== t.carets[i].ghost) {continue};
         t.carets[i].dir = 0;
     }
     if (x == 1) {
         for (let i = 0; i < t.carets.length; i++) {
+            if (ghost !== t.carets[i].ghost) {continue};
             let c = t.carets[i];
             if (c.x == t.data[c.y].length
                 &&
@@ -628,6 +686,7 @@ GrimoireTab.prototype.moveCaretsX = function(x, sel = false) {
         }
     } else if (x == -1) {
         for (let i = 0; i < t.carets.length; i++) {
+            if (ghost !== t.carets[i].ghost) {continue};
             let c = t.carets[i];
             if (c.x == 0 && c.y > 0) {
                 c.y--;
@@ -639,6 +698,7 @@ GrimoireTab.prototype.moveCaretsX = function(x, sel = false) {
         }
     }
     for (let i = 0; i < t.carets.length; i++) {
+        if (ghost !== t.carets[i].ghost) {continue};
         let c = t.carets[i];
         for (let j = t.carets.length -1; j > i; j--) {
             let c2 = t.carets[j];
@@ -652,9 +712,10 @@ GrimoireTab.prototype.moveCaretsX = function(x, sel = false) {
     }
 };
 
-GrimoireTab.prototype.moveCaretsY = function(y, sel = false) {
+GrimoireTab.prototype.moveCaretsY = function(y, sel = false, ghost = false) {
     let t = this;
     for (let i = 0; i < t.carets.length; i++) {
+        if (ghost !== t.carets[i].ghost) {continue};
         let c = t.carets[i];
         if (c.dir == 0) {
             c.dir = 1;
@@ -663,6 +724,7 @@ GrimoireTab.prototype.moveCaretsY = function(y, sel = false) {
     }
     if (y == 1) {
         for (let i = 0; i < t.carets.length; i++) {
+            if (ghost !== t.carets[i].ghost) {continue};
             let c = t.carets[i];
             if (c.y < t.data.length - 1) {
                 c.y++;
@@ -673,6 +735,7 @@ GrimoireTab.prototype.moveCaretsY = function(y, sel = false) {
         }
     } else if (y == -1) {
         for (let i = 0; i < t.carets.length; i++) {
+            if (ghost !== t.carets[i].ghost) {continue};
             let c = t.carets[i];
             if (c.y > 0) {
                 c.y--;
@@ -683,7 +746,8 @@ GrimoireTab.prototype.moveCaretsY = function(y, sel = false) {
         }
     }
     for (let i = 0; i < t.carets.length; i++) {
-         let c = t.carets[i];
+        if (ghost !== t.carets[i].ghost) {continue};
+        let c = t.carets[i];
         if (c.y < t.scroll.y) {
             t.scroll.y--;
             break;
@@ -693,6 +757,7 @@ GrimoireTab.prototype.moveCaretsY = function(y, sel = false) {
         }
     }
     for (let i = 0; i < t.carets.length; i++) {
+        if (ghost !== t.carets[i].ghost) {continue};
         let c = t.carets[i];
         for (let j = t.carets.length -1; j > i; j--) {
             let c2 = t.carets[j];
@@ -869,18 +934,23 @@ GrimoireTab.prototype.evaluateBlock = function() {
 };
 
 
-GrimoireTab.prototype.update = function(s) {
+GrimoireTab.prototype.update = function(s, ghost = false) {
     let t = this;
     let sel = false;
+    // console.log(ghost);
     for (let i = 0; i < t.carets.length; i++) {
+        // console.log(t.carets[i].ghost);
+        if (ghost !== t.carets[i].ghost) {continue};
         let c = t.carets[i];
         if (c.sel !== null) {
             sel = true;
         }
+        // console.log("What happened there? " + i);
     }
     if (sel) {
         // console.log(sel);
         for (let i = 0; i < t.carets.length; i++) {
+            if (ghost !== t.carets[i].ghost) {continue};
         // for (let i = 0; i < 1; i++) {
             let c = t.carets[i];
             let yOffset = 0;
@@ -941,6 +1011,7 @@ GrimoireTab.prototype.update = function(s) {
     }
     if (s.length == 1 && !sel) {
         for (let i = 0; i < t.carets.length; i++) {
+            if (ghost !== t.carets[i].ghost) {continue};
             let c = t.carets[i];
             // let line = t.data[c.y];
             t.data[c.y] = t.data[c.y].slice(0, c.x) + s + t.data[c.y].slice(c.x);
@@ -956,6 +1027,7 @@ GrimoireTab.prototype.update = function(s) {
             // c.x++;
         } else if (s == "" && !sel) {
             for (let i = 0; i < t.carets.length; i++) {
+                if (ghost !== t.carets[i].ghost) {continue};
             let c = t.carets[i];
             // let line = t.data[c.y];
             t.data[c.y] = t.data[c.y].slice(0, c.x - 1) + t.data[c.y].slice(c.x);
@@ -1011,7 +1083,7 @@ GrimoireTab.prototype.update = function(s) {
 // };
 
 
-GrimoireTab.prototype.select = function() {
+GrimoireTab.prototype.select = function(ghost = false) {
     let t = this;
     // // if (t.selections.length == 0) {
     // //     for (let i = 0; i < t.carets.length; i++) {
@@ -1036,16 +1108,21 @@ GrimoireTab.prototype.select = function() {
     //     if (x == -1 || y == -1) {
     //         if (c.sel == null) {c.sel == []}
     //     } else if (x == 1 || y == 1) {
-
     //     }
     //     // c.sel = [];
     //     // c.sel[0] = c.x;
     //     // c.sel[1] = 
     // }
+    // console.log("That's me!" + ghost);
     for (let i = 0; i < t.carets.length; i++) {
+        if (ghost !== t.carets[i].ghost) {continue};
         let c = t.carets[i];
+        
+        // console.log(c);
         if (c.sel == null) {
+            // console.log("yet again");
             c.sel = [c.x, c.y];
+            // console.log(c.sel, t.carets[i].sel);
         }
     }
 };
@@ -1127,7 +1204,7 @@ GrimoireEditor.prototype.saveTab = function() {
     this.activeTab.saveTab();
 };
 
-GrimoireEditor.prototype.update = function(e) {
+GrimoireEditor.prototype.update = function(e, ghost = false) {
     let s = e.key;
     let t = this.activeTab;
     let modifier = (isMac) ? e.metaKey : e.ctrlKey;
@@ -1150,55 +1227,56 @@ GrimoireEditor.prototype.update = function(e) {
     
         if (s == "ArrowDown" && e.altKey && t.scroll.y < t.data.length) {
             t.scroll.y++;
-            t.moveCaretsY(1);
+            t.moveCaretsY(1, false, ghost);
             updateHistory = false;
         } else if (s == "ArrowDown" && modifier) {
-            for (let i = 0; i < 25; i++) {t.moveCaretsY(1);}
+            for (let i = 0; i < 25; i++) {t.moveCaretsY(1, false, ghost);}
             updateHistory = false;
         } else if (s == "ArrowUp" && modifier) {
-            for (let i = 0; i < 25; i++) {t.moveCaretsY(-1);}
+            for (let i = 0; i < 25; i++) {t.moveCaretsY(-1, false, ghost);}
             updateHistory = false;
         } else if (s == "ArrowUp" && e.altKey && t.scroll.y > 0) {
             t.scroll.y--;
-            t.moveCaretsY(-1);
+            t.moveCaretsY(-1, false, ghost);
             updateHistory = false;
         } else if (s == "ArrowRight" && e.shiftKey) {
-            t.select();
-            t.moveCaretsX(1, true);
+            t.select(ghost);
+            t.moveCaretsX(1, true, ghost);
             // updateHistory = false;
         } else if (s == "ArrowRight") {
-            t.moveCaretsX(1);
+            t.moveCaretsX(1, false, ghost);
             updateHistory = false;
         } else if (s == "ArrowLeft" && e.shiftKey) {
-            t.select();
-            t.moveCaretsX(-1, true);
+            t.select(ghost);
+            t.moveCaretsX(-1, true, ghost);
             // updateHistory = false;
         } else if (s == "ArrowLeft") {
-            t.moveCaretsX(-1);
+            t.moveCaretsX(-1, false, ghost);
             updateHistory = false;
         } else if (s == "ArrowUp" && e.shiftKey) {
-            t.select();
-            t.moveCaretsY(-1, true);
+            t.select(ghost);
+            t.moveCaretsY(-1, true, ghost);
             // updateHistory = false;
         } else if (s == "ArrowUp") {
-            t.moveCaretsY(-1);
+            t.moveCaretsY(-1, false, ghost);
             updateHistory = false;
         } else if (s == "ArrowDown" && e.shiftKey) {
-            t.select();
-            t.moveCaretsY(1, true);
+            t.select(ghost);
+            t.moveCaretsY(1, true, ghost);
             // updateHistory = false;
         } else if (s == "ArrowDown") {
-            t.moveCaretsY(1);
+            // console.log("yipeee!");
+            t.moveCaretsY(1, false, ghost);
             updateHistory = false;
         } else if (s == "Home") {
             // for (let i = 0; i < 25; i++) {t.moveCaretsY(-1);}
-                t.scroll.y = 0;
+            t.scroll.y = 0;
             updateHistory = false;
         } else if (s == "PageUp") {
-            for (let i = 0; i < 25; i++) {t.moveCaretsY(-1);}
+            for (let i = 0; i < 25; i++) {t.moveCaretsY(-1, false, ghost);}
             updateHistory = false;
         } else if (s == "PageDown") {
-            for (let i = 0; i < 25; i++) {t.moveCaretsY(1);}
+            for (let i = 0; i < 25; i++) {t.moveCaretsY(1, false, ghost);}
             updateHistory = false;
         } else if (s == "z" && modifier && e.shiftKey) {
             if (t.historyIndex < t.history.length - 1){
@@ -1230,16 +1308,19 @@ GrimoireEditor.prototype.update = function(e) {
             updated = false;
         } else if (s == "." && modifier) {
             // if (t.lang == "scd") {
-                socket.emit('interpretSuperCollider', 'CmdPeriod.run;', t.path)
+            socket.emit('interpretSuperCollider', 'CmdPeriod.run;', t.path)
             // }
             updated = false;
         } else if (s == "Enter") {
             t.addLine();
             // updated = false;
         } else if (s.length == 1 && (modifier == false)) {
-            t.update(s);
+            // console.log(ghost);
+            t.update(s, ghost);
         } else if (s == "Backspace") {
-            t.update("");
+            // console.log("what down");
+    
+            t.update("", ghost);
         } else {
             updated = false;
         }
