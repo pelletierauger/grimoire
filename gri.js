@@ -751,7 +751,7 @@ GrimoireTab.prototype.moveCaretsY = function(y, sel = false, ghost = false) {
         if (c.y < t.scroll.y) {
             t.scroll.y--;
             break;
-        } else if (c.y > t.scroll.y + 24) {
+        } else if (c.y > t.scroll.y + 34) {
             t.scroll.y++;
             break;
         }
