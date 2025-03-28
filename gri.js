@@ -507,7 +507,9 @@ GrimoireTab.prototype.clear = function() {
     }
 };
 
-GrimoireTab.prototype.open = function() {};
+GrimoireTab.prototype.open = function() {
+    this.drawCount = 0;
+};
 
 GrimoireTab.prototype.close = function() {};
 
