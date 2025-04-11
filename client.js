@@ -26,6 +26,7 @@ let griFiles;
 let ge;
 let scdTabs = [];
 let jsTabs = [];
+// let tabsLoaded = false;
 let activeScd = null;
 let activeJs = null;
 let appControl, keysControl;
@@ -39,7 +40,7 @@ window.onload = init;
 let appControlCommands = [];
 let appControlCommandID = 0;
 
-let curtain, scdArea, scdConsoleArea, jsArea, jsConsoleArea, jsCmArea, cmArea;
+let curtain, scdArea, scdConsoleArea, jsArea, jsConsoleArea, jsCmArea, cmArea, tabArea;
 let displayMode = "both";
 let hidden = false;
 let curtainDisplay = false;
@@ -359,6 +360,7 @@ function init() {
     jsConsoleArea = document.querySelector('.javascript-area>.console');
     cmArea = document.querySelector('.CodeMirror');
     jsCmArea = document.querySelector('.javascript-area>.CodeMirror');
+    tabArea = document.getElementById("file-tabs");
 }
 
 function appControlDecID() {
@@ -400,6 +402,7 @@ function interpretAppControl(value) {
             scdConsoleArea.style.display = "none";
             jsArea.style.display = "none";
             jsConsoleArea.style.display = "none";
+            tabArea.style.display = "none";
             hidden = true;
             return;
         } else {
@@ -415,6 +418,7 @@ function interpretAppControl(value) {
                 jsArea.style.display = "block";
                 jsConsoleArea.style.display = "block";
             }
+            tabArea.style.display = "block";
             hidden = false;
             return;
         }
@@ -497,7 +501,6 @@ function interpretAppControl(value) {
         }
     }
     if (value === "ls") {
-        let allFiles = "";
         for (let i = 0; i < files.scd.length; i++) {
             let comma = ", ";
             allFiles += files.scd[i].name + comma;

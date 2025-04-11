@@ -497,6 +497,7 @@ let GrimoireTab = function(o) {
     this.attachedHeadState = true;
     this.highlights = [];
     this.drawCount = 0;
+    this.abstractSelections = [];
     ge.tabs.push(this);
 };
 

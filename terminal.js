@@ -137,6 +137,24 @@ drawTerminal = function(selectedProgram) {
             }
             if (ge.evaluated > 0) {ge.evaluated--};
         }
+        if (ge.activeTab.abstractSelections.length) {
+            if (selections == null) {
+                selections = [];
+                for (let y = 0; y < 22 + 13; y++) {
+                    selections[y] = [];
+                    for (let x = 0; x < 109; x++) {
+                        selections[y][x] = 0;
+                    }
+                }
+            }  
+            let absel = ge.activeTab.abstractSelections; 
+            for (let i = 0; i < absel.length; i++) {
+                let x = absel[i][0], y = absel[i][1] - ge.t.scroll.y;
+                if (y >= 0 && y < 35) {
+                    selections[y][x] = 1;
+                }
+            }
+        }
     }
     //     
     for (let y = 0; y < Math.floor(nt / 109)+10; y++) {
@@ -334,6 +352,8 @@ roundedSquare.vertText = `
         // gl_Position.x += disturbance * 0.1 * disturb * (1. + distr2);
         gl_Position.y += disturbance * 0.5 * disturb * (10. + distr2);
         // gl_Position.x += tan(floor(sin(gl_Position.y * 1e3))) * 0.1;
+        // gl_Position.x += sin(((gl_Position.y * 1.+time*0.5e-2)+gl_Position.x*1.5)*2e1) * 0.01;
+        // gl_Position.y += sin(((gl_Position.x * 1.+time*0.5e-2)+gl_Position.y*1.5)*2e1) * 0.01;
         // gl_Position.xy *= (1.0 - distance(gl_Position.xy, vec2(0,0)) * 0.1) * 1.05;
         center = vec2(gl_Position.x, gl_Position.y);
         center = 512.0 + center * 512.0;
